@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Fichas;
 
+use App\Models\Role;
 use App\Models\User;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Group;
@@ -44,7 +45,7 @@ class FichasEditLayout extends Rows
 
 
             Input::make('ficha.title')
-                
+
                 ->title('Título')
                 ->required()
                ->class('form-control uppercase')
@@ -61,13 +62,19 @@ class FichasEditLayout extends Rows
                 ->maxlength(200)
                 ->placeholder('Breve descripción para vista previa'),
 
-
+                Relation::make('ficha.roles')
+                ->fromModel(Role::class, 'name')
+                ->multiple()
+                ->required()
+                ->title(__('Asignar roles a la ficha')),
 
 
 
             Upload::make('ficha.attachment')
                 ->style('border-width: 10px 1px;')
                 ->title('Todos los archivos'),
+
+
         ];
     }
 }

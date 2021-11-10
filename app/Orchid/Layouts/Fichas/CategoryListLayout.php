@@ -40,7 +40,7 @@ class CategoryListLayout extends Table
                 {
                     return Link::make($category->name)
                                 ->myTooltip('Editar Categoría')
-                                ->style('background-color: rgba(var(--bs-light-rgb),var(--bs-bg-opacity))!important;color:var(--bs-gray)')
+                                ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 py-1')
                                 ->route('platform.category.edit' ,$category);
                 }),
 
@@ -59,6 +59,7 @@ class CategoryListLayout extends Table
                     return ModalToggle::make(Str::of($category->description)->limit(100, ' ...'))
                     ->myTooltip('Ver descripción completa')
                     ->modal('oneAsyncModal')
+                    ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1')
                     ->modalTitle('Descripción')
                     ->asyncParameters([
                         'category' => $category->id,

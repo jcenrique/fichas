@@ -11,7 +11,7 @@
             <h1 class="card-title text-xl font-bold text-gray-400">{{$categoria->name}}</h1>
 
             <p class="text-sm text-red-800">
-                Fichas: <small> ({{count($categoria->fichas)}})</small>
+                Fichas: <small> ({{$categoria->fichas_count}})</small>
             </p>
 
         </div>

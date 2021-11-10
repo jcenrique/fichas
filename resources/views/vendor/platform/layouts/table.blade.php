@@ -1,3 +1,9 @@
+<style>
+    .nodisplay{
+        display: none;
+    }
+</style>
+
 @empty(!$title)
     <fieldset>
             <div class="col p-0 px-3">
@@ -71,4 +77,13 @@
         ])
 </div>
 
+<script>
 
+$("table tbody tr").each(function() {
+        let cell = $.trim($(this).find('td').text());
+        if (cell.length == 0){
+            console.log('Empty cell');
+            $(this).addClass('nodisplay');
+        }
+});
+</script>

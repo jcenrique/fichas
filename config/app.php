@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-        OwenIt\Auditing\AuditingServiceProvider::class,
+
         Spatie\EloquentSortable\EloquentSortableServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,

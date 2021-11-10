@@ -157,6 +157,7 @@ Route::screen('ficha/{ficha?}', FichaEditScreen::class)
     })
     ->name('platform.ficha.edit');
 
+
 Route::screen('fichas', FichaListScreen::class)
 ->breadcrumbs(function (Trail $trail) {
     return $trail
@@ -167,3 +168,5 @@ Route::screen('fichas', FichaListScreen::class)
         );
 })
     ->name('platform.fichas.list');
+
+

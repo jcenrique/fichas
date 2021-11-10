@@ -21,7 +21,7 @@
                         </div>
                         <div class="flex justify-end items-end">
                             <a href="{{ route('fichas.fichaPDF', $ficha->id) }}" class="btn btn-dark btn-block btn-rounded">
-                                {{__('Descargar')}}
+                                {{__('Imprimir/Descargar')}}
                             </a>
                         </div>
                     </div>

@@ -13,8 +13,12 @@ class HomeController extends Controller
     {
         $this->authorize('acceso', Category::class);
 
-        $categorias =Category::all();
+       // $categorias =Category::all();
+        $categorias = Category::withCount(['fichas' => function ($query) {
+            $query->where('status', 1);
+        }])->get();
 
+        
         return view('welcome' ,compact('categorias'));
     }
 }

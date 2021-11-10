@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Orchid\Attachment\Attachable;
 use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,15 +14,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 
-class Capitulo extends Model  implements Auditable, Sortable
+class Capitulo extends Model  implements  Sortable
 {
     use HasFactory;
-
+    USE SoftDeletes;
     use Attachable;
-    use \OwenIt\Auditing\Auditable;
+
     use SortableTrait;
 
-
+    protected $withCount = [ 'audits'];
     public $sortable = [
         'order_column_name' => 'order',
         'sort_when_creating' => true,

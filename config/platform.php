@@ -163,7 +163,7 @@ return [
     */
 
     'icons' => [
-
+        'fa' => resource_path('icons/fontawesome')
     ],
 
     /*

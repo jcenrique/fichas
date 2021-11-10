@@ -63,9 +63,9 @@
     <div class="row">
         @yield('body-left')
 
-        <div class="col min-vh-100 overflow-hidden bg-gray-100">
+        <div class="col min-vh-100 overflow-hidden bg-gray-100 ">
             <div class="d-flex flex-column-fluid">
-                <div class="container-md h-full px-0 px-md-5">
+                <div class="container h-full px-0 px-md-5">
                     @yield('body-right')
                 </div>
             </div>

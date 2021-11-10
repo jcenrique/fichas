@@ -14,9 +14,17 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Http\Requests\FichaRequest;
+use App\Notifications\FichaCreada;
+use App\Orchid\Layouts\Fichas\AuditCapituloTable;
+use App\Orchid\Layouts\Fichas\AuditFichaTable;
 use App\Orchid\Layouts\Fichas\CodigoListener;
 use App\Orchid\Layouts\Fichas\FichasEditLayout;
 use App\Orchid\Layouts\Fichas\CapituloEditLayout;
+use Illuminate\Support\Facades\Mail;
+use Orchid\Screen\Layouts\View;
+use Orchid\Screen\Sight;
+use Orchid\Support\Color;
+use Orchid\Support\Facades\Alert;
 
 class FichaEditScreen extends Screen
 {
@@ -34,6 +42,8 @@ class FichaEditScreen extends Screen
      * @var bool
      */
     public $exists = false;
+
+    public $publicar = false;
 
     public $ficha;
 
@@ -58,12 +68,12 @@ class FichaEditScreen extends Screen
 
         if ($this->exists) {
             $this->name = 'Editar ficha';
-            $this->description = $ficha->title . ': ' . $ficha->category->name;
+            $this->description = $ficha->title ;
         }
 
         return [
 
-            'title' =>'',
+            'title' => '',
             'ficha' => $ficha,
             'category_id' => $ficha->category_id,
             'old_category_id' => $ficha->category_id,
@@ -82,6 +92,14 @@ class FichaEditScreen extends Screen
     {
 
         return [
+
+            Button::make($this->ficha->status?'Poner en borrador':'Publicar')
+
+                ->icon('pencil')
+                ->method('publicarFicha')
+               // ->parameters(['ficha' => $this->ficha])
+                ->canSee($this->exists),
+
             Button::make('Crear ficha')
 
                 ->icon('pencil')
@@ -110,32 +128,51 @@ class FichaEditScreen extends Screen
     {
 
 
-            return [
+        return [
+            Layout::columns([
+                Layout::view('components.cabecera-ficha', ['ficha' => $this->ficha])
+            ]),
 
-                Layout::tabs([
-                    'Codificación' => [
-                        CodigoListener::class,
-                    ],
-                    'Datos básicos'      => [
-                        FichasEditLayout::class,
+            Layout::tabs([
+                'Codificación' => [
+                    CodigoListener::class,
+                ],
+                'Datos básicos'      => [
+                    FichasEditLayout::class,
 
+                ],
+                'Capitulos' =>  Layout::view('components.view-capitulos'),
+
+
+
+
+
+                'Auditoría' => Layout::accordion([
+                    'Cambios en ficha' => [
+                        AuditFichaTable::class,
                     ],
-                   'Capitulos' =>  Layout::view('components.view-capitulos'),
+
+                    'Cambios en capitulos' => [
+                        AuditCapituloTable::class,
+                    ],
+
+
 
                 ]),
 
 
-                Layout::modal('oneAsyncModal', CapituloEditLayout::class)
-                    ->title('Nuevo Capítulo')
-                    ->size(Modal::SIZE_LG)
-                ->async('asyncGetFicha')
-                ,
+            ])->activeTab('Codificación')
+            ,
+
+            Layout::modal('oneAsyncModal', CapituloEditLayout::class)
+                ->title('Nuevo Capítulo')
+                ->size(Modal::SIZE_LG)
+                ->async('asyncGetFicha'),
 
 
-            ];
 
 
-
+        ];
     }
 
 
@@ -150,6 +187,8 @@ class FichaEditScreen extends Screen
 
 
 
+        //Ficha::disableAuditing();
+
         $fichaId = $ficha->id;
         $category_id =  $request->get('category_id');
         $old_category_id =  $request->get('old_category_id');
@@ -161,6 +200,7 @@ class FichaEditScreen extends Screen
             array_merge($request->get('ficha'), ['code' =>  $code_ficha, 'category_id' => $category_id])
         );
 
+        $ficha->roles()->attach($request->get('ficha')['roles']);
 
         $ficha->attachment()->syncWithoutDetaching(
             $request->input('ficha.attachment', [])
@@ -177,7 +217,37 @@ class FichaEditScreen extends Screen
             Toast::info('Registro actualizado con éxito');
         }
 
-       return redirect()->route('platform.ficha.edit', [$ficha->id]);
+
+
+      //  Ficha::enableAuditing();
+        return redirect()->route('platform.ficha.edit', [$ficha->id]);
+    }
+     /**
+     * @param Post    $ficha
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function publicarFicha(Ficha $ficha, FichaRequest $request)
+    {
+
+        $ficha->update([
+            'status' =>  !$ficha->status,
+        ]);
+
+        if($ficha->status){
+
+            $data = array('name'=>"Virat Gandhi");
+
+            Mail::send(['text'=>'mail'], $data, function($message) {
+                $message->to('jcenrique170@gmail.com', 'Tutorials Point')->subject
+                   ('Laravel Basic Testing Mail');
+                $message->from('jcenrique170@gmail.com','Virat Gandhi');
+             });
+        }
+
+        return redirect()->route('platform.ficha.edit', [$ficha->id]);
     }
 
     /**
@@ -188,7 +258,21 @@ class FichaEditScreen extends Screen
      */
     public function remove(Ficha $ficha)
     {
-        $ficha->delete();
+
+        try {
+
+            $ficha->delete();
+        } catch (\Illuminate\Database\QueryException $ex) {
+
+
+            Alert::view('layouts.partials.alert', Color::DANGER(), [
+                'error' => $ex,
+                'message' => 'Eliminar Ficha'
+            ]);
+//
+            report($ex);
+            return;
+        }
 
         Toast::warning('Has eliminado correctamente la ficha.');
 
@@ -226,7 +310,7 @@ class FichaEditScreen extends Screen
      *
      * @return array
      */
-    public function asyncGetFicha(Ficha $ficha , Capitulo $capitulo ): array
+    public function asyncGetFicha(Ficha $ficha, Capitulo $capitulo): array
     {
 
         return [
@@ -240,25 +324,24 @@ class FichaEditScreen extends Screen
      * @param User    $user
      * @param Request $request
      */
-    public function saveCapitulo( $ficha_id, $capitulo_id =null , Request $request)
+    public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
     {
 
         $ficha = Ficha::find($ficha_id);
-        if ($request->capitulo['id'] != null){
+        if ($request->capitulo['id'] != null) {
             Capitulo::find($request->capitulo['id'])->update([
-                            'title' => $request->capitulo['title'],
-                            'body' => $request->capitulo['body'],
-                    ]);
-        }else{
+                'title' => $request->capitulo['title'],
+                'body' => $request->capitulo['body'],
+            ]);
+        } else {
             $ficha->capitulos()->create(
 
-                array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id])
+                array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
             );
-
         }
 
 
-       // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
+        // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
 
 
 
@@ -267,35 +350,33 @@ class FichaEditScreen extends Screen
         return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
 
-    public function removeCapitulo($ficha_id, $capitulo_id )
+    public function removeCapitulo($ficha_id, $capitulo_id)
     {
 
 
 
-        Capitulo::find($capitulo_id)->delete();
+        Capitulo::find($capitulo_id)->forceDelete();
 
 
 
         Toast::warning(__('Registro eliminado.'));
 
-        return redirect()->route('platform.ficha.edit', [$ficha_id ]);
+        return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
-    public function menosCapitulo($ficha_id, $capitulo_id )
+    public function menosCapitulo($ficha_id, $capitulo_id)
     {
 
-        Capitulo::find($capitulo_id)->moveOrderDown();
+        Capitulo::find($capitulo_id)->moveOrderDown();;
 
-
-;
-
-        return redirect()->route('platform.ficha.edit', [$ficha_id ]);
+        return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
 
-    public function masCapitulo($ficha_id, $capitulo_id )
+    public function masCapitulo($ficha_id, $capitulo_id)
     {
         Capitulo::find($capitulo_id)->moveOrderUp();
 
-        return redirect()->route('platform.ficha.edit', [$ficha_id ]);
+        return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
+
 
 }

@@ -4,15 +4,15 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 
-use OwenIt\Auditing\Contracts\Auditable;
+
 use Orchid\Platform\Models\User as Authenticatable;
 
 
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable
 {
     use Notifiable;
 
-    use \OwenIt\Auditing\Auditable;
+
     /**
      * The attributes that are mass assignable.
      *

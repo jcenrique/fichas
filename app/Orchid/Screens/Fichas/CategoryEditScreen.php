@@ -9,6 +9,8 @@ use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
@@ -161,8 +163,19 @@ class CategoryEditScreen extends Screen
      */
     public function remove(Category $category)
     {
+        try {
+            $category->delete();
+        } catch (\Illuminate\Database\QueryException $ex) {
 
-        $category->delete();
+
+            Alert::view('layouts.partials.alert', Color::DANGER(), [
+                'error' => $ex,
+                'message' => 'Eliminar categoría'
+            ]);
+
+            report($ex);
+            return ;
+        }
 
         Toast::info('Registro eliminado con éxito');
 

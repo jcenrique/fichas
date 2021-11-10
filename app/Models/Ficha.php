@@ -8,32 +8,36 @@ use Laravel\Scout\Searchable;
 use Orchid\Filters\Filterable;
 use Orchid\Attachment\Attachable;
 use Illuminate\Support\Facades\Log;
-use Spatie\ModelStatus\HasStatuses;
+
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+
 
 use App\Orchid\Presenters\FichaPresenter;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+use Orchid\Platform\Models\Role;
 
-
-class Ficha extends Model implements Auditable
+class Ficha extends Model
 {
     use HasFactory;
     use AsSource;
-    use SoftDeletes ,CascadeSoftDeletes;
+    use SoftDeletes ;
     use Attachable;
     use  Filterable;
     use Searchable;
-    use HasStatuses;
+    use Notifiable;
+  
 
-    use \OwenIt\Auditing\Auditable;
 
 
-    protected $cascadeDeletes = ['capitulos'];
 
-    protected $dates = ['deleted_at'];
+    use \Askedio\SoftCascade\Traits\SoftCascadeTrait;
+
+
+    protected $withCount = [ 'audits', 'capitulos'];
+
 
     protected $fillable = [
         'title',
@@ -41,6 +45,7 @@ class Ficha extends Model implements Auditable
         'user_id',
         'code',
         'description',
+        'status'
 
 
     ];
@@ -48,7 +53,8 @@ class Ficha extends Model implements Auditable
 
         'category_id',
         'code',
-        'title'
+        'title',
+        'status'
     ];
 
     /**
@@ -65,7 +71,8 @@ class Ficha extends Model implements Auditable
         'created_at',
         'deleted_at',
     ];
-    protected $withCount = ['capitulos', 'audits'];
+
+    protected $softCascade = ['capitulos'];
 
     public static function boot() {
 
@@ -74,10 +81,14 @@ class Ficha extends Model implements Auditable
 	    static::created(function($item) {
 	        Log::info('Item Created Event:'.$item);
 	    });
-
+        self::deleting(function ($model) {
+            $model->status = 0;
+            $model->save();
+        });
 
 
 	}
+
 
     public function setTitleAttribute($value)
     {
@@ -125,6 +136,11 @@ class Ficha extends Model implements Auditable
     public function capitulos()
     {
         return $this->hasMany(Capitulo::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
 
     public function scopeOrderCapitulo($query)

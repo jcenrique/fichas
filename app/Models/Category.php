@@ -14,6 +14,7 @@ class Category extends Model
     use AsSource;
     use Filterable;
 
+    protected $withCount = [ 'fichas'];
 
     protected $fillable =[
         'name',

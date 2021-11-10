@@ -29,7 +29,7 @@
         <div class="w-full flex flex-col  border-t-2">
 
             <div class="flex  justify-between text-gray-500 mb-2">
-                <div class="">Capitulos: <small>  ({{count($ficha->capitulos)}})</small></div>
+                <div class="">Capitulos: <small>  ({{$ficha->capitulos_count}})</small></div>
                 <div class="">Versiones: <small>  ({{$ficha->audits_count}})</small></div>
 
             </div>

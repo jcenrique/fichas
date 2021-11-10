@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\Fichas\FichaController;
 use App\Http\Controllers\HomeController;
+use App\Orchid\Screens\Fichas\FichaListScreen;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+
+
 Route::get('/', HomeController::class)->name('home')->middleware(['auth']);
 
 Route::get('/fichas-category/{category_id?}', [FichaController::class, 'list'])->name('fichas.list')->middleware(['auth']);
@@ -21,4 +27,7 @@ Route::get('/fichas-category/{category_id?}', [FichaController::class, 'list'])-
 Route::get('/ficha/show/{id?}', [FichaController::class, 'show'])->name('fichas.show')->middleware(['auth']);
 
 
+
 Route::get('/ficha/ficha-pdf/{id?}', [FichaController::class, 'fichaPDF'])->name('fichas.fichaPDF')->middleware(['auth']);
+
+

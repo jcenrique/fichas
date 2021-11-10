@@ -53,7 +53,7 @@ class CategoryListScreen extends Screen
         // $this-> authorize($category);
 
         return [
-            'categories' => Category::filters()->defaultSort('name')->paginate(5),
+            'categories' => Category::filters()->defaultSort('name')->paginate(10),
         ];
     }
 
