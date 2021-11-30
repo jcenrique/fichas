@@ -8,8 +8,9 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Orchid\Platform\Notifications\DashboardChannel;
 use Orchid\Platform\Notifications\DashboardMessage;
+use Orchid\Support\Color;
 
-class FichaCreada extends Notification
+class FichaCreada extends Notification  //implements ShouldQueue
 {
     use Queueable;
 
@@ -25,8 +26,11 @@ class FichaCreada extends Notification
     public function __construct($title , $message , $ficha)
     {
         $this->title=$title;
-        $this->message=$message;
+        $this->message=$message . " a";
         $this->ficha = $ficha;
+        //$delay = now()->addMinutes(1);
+
+        //$this->delay($delay);
 
     }
 
@@ -39,7 +43,8 @@ class FichaCreada extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail' , DashboardChannel::class];
+        return [DashboardChannel::class];
+       // return ['mail' , DashboardChannel::class];
     }
 
     /**
@@ -52,7 +57,11 @@ class FichaCreada extends Notification
     {
 
         return (new MailMessage)
-                    ->line(__('Se ha creado una nueva ficha'))
+                    ->line($this->message)
+                    ->line(__('Categoría') . ': ' . $this->ficha->category->name)
+                    ->line(__('Código') . ': ' . $this->ficha->code)
+                    ->line(__('Título') . ': ' . $this->ficha->title)
+                    ->line(__('Descripción') . ': ' . $this->ficha->description)
                     ->action(__('Ver ficha'), url('/ficha/show/' . $this->ficha->id))
                     ->line(__('Gracias por usar la aplicación!'));
     }
@@ -73,8 +82,9 @@ class FichaCreada extends Notification
     public function toDashboard($notifiable)
 {
     return (new DashboardMessage())
-        ->title('Hello Word')
-        ->message('New post!')
-        ->action(url('/'));
+        ->title('Actualizada o creada ficha')
+        ->type(Color::SUCCESS())
+        ->message($this->ficha->toJson())
+        ->action(url('/ficha/show/' . $this->ficha->id));
 }
 }

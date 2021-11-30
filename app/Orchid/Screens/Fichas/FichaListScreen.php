@@ -8,8 +8,13 @@ use App\Models\User;
 use App\Notifications\FichaCreada;
 use App\Orchid\Filters\CategoryFilter;
 use App\Orchid\Filters\FichaTrashedFilter;
+use App\Orchid\Layouts\Fichas\CapituloEditLayout;
 use App\Orchid\Layouts\Fichas\CategorySelection;
 use App\Orchid\Layouts\Fichas\FichaListLayout;
+use App\Orchid\Layouts\Fichas\LayautChangeStatus;
+use App\Orchid\Layouts\Fichas\LayoutChangeStatus;
+use App\Orchid\Layouts\Fichas\VersionEditLayout;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -17,9 +22,14 @@ use Orchid\Crud\Filters\WithTrashed;
 use Orchid\Platform\Models\Role;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Label;
+use Orchid\Screen\Layouts\Modal;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class FichaListScreen extends Screen
 {
@@ -32,12 +42,13 @@ class FichaListScreen extends Screen
 
     public $description = 'Fichas disponibles para visualizar';
     private $withTrashed = false;
+    private $ficha;
 
     public $permission = [
         'platform.fichas.fichas'
     ];
 
-
+   
     /**
      * Query data.
      *
@@ -46,13 +57,15 @@ class FichaListScreen extends Screen
     public function query(Ficha $ficha): array
     {
 
-
+       
         $this->exists = $ficha->exists;
-
+       
         if ($this->exists) {
             $this->name = 'Editar ficha';
+          
+          
         }
-        $fichas = Ficha::with('category')->filtersApply([CategoryFilter::class, WithTrashed::class])->filters()->defaultSort('category_id', 'asc')->paginate(10);
+        $fichas = Ficha::with('category','roles')->filtersApply([CategoryFilter::class, WithTrashed::class])->filters()->defaultSort('category_id', 'asc')->paginate(10);
         $ficha->load('attachment');
 
         if (count($fichas) != 0) {
@@ -77,7 +90,7 @@ class FichaListScreen extends Screen
     {
         return [
             Link::make('Crear nueva')
-            ->canSee(!$this->withTrashed)
+                ->canSee(!$this->withTrashed)
                 ->myTooltip('Crear un nueva Ficha')
                 ->class('btn btn-default btn-rounded')
                 ->icon('fa.plus')
@@ -92,7 +105,7 @@ class FichaListScreen extends Screen
                 ->class('btn btn-default btn-rounded')
                 ->icon('fa.trash'),
 
-                Button::make('Restaurar seleccionados')
+            Button::make('Restaurar seleccionados')
                 ->canSee($this->withTrashed)
                 ->method('restoreSelectTrash')
                 ->confirm('¿Desea restaurar los elementos seleccionados?')
@@ -113,11 +126,25 @@ class FichaListScreen extends Screen
      */
     public function layout(): array
     {
-
+       
+      
         return [
             CategorySelection::class,
 
             FichaListLayout::class,
+               
+            Layout::modal('modalStatus',[
+                VersionEditLayout::class,
+            ])
+                ->title(__('¿Desea cambiar el estado de la ficha?'))
+                ->size(Modal::SIZE_SM)
+                ->applyButton(__('Cambiar estado'))
+                ->type('bg-blue-200')
+                ->withoutCloseButton()
+                ->async('asyncGetData')
+               
+               
+                ,
 
 
         ];
@@ -129,8 +156,7 @@ class FichaListScreen extends Screen
 
             foreach ($request->fichas as $id) {
                 $ficha = Ficha::onlyTrashed()->find($id);
-               $ficha->restore();
-
+                $ficha->restore();
             }
 
             Toast::info('Elementos recuperados con éxito');
@@ -140,7 +166,6 @@ class FichaListScreen extends Screen
         }
 
         return redirect()->route('platform.fichas.list');
-
     }
     public function deleteSelectTrash(Request $request)
     {
@@ -149,8 +174,7 @@ class FichaListScreen extends Screen
             foreach ($request->fichas as $id) {
                 $ficha = Ficha::onlyTrashed()->find($id);
                 $ficha->capitulos()->forceDelete();
-               $ficha->forceDelete();
-
+                $ficha->forceDelete();
             }
 
             Toast::info('Elementos recuperados con éxito');
@@ -159,32 +183,61 @@ class FichaListScreen extends Screen
             Toast::error('Se ha producido un error.');
         }
 
-      //  return redirect()->route('platform.fichas.list');
+        //  return redirect()->route('platform.fichas.list');
 
     }
 
-    public function publicar(Ficha $ficha, Request  $request)
+    public function publicar(  $id, Request  $request)
     {
+        $ficha = Ficha::find($id);
 
+     
+       if($request->get('aceptar')){
+            
+        $ficha->update([
+            'status' =>  !$ficha->status,
+            'version' => $ficha->version +1
+        ]);
+       }else{
+            
+        $ficha->update([
+            'status' =>  !$ficha->status,
+        ]);
+       }
+       
 
-          // $ficha->status= !$ficha->status;
-           $ficha->update([
-               'status' =>  !$ficha->status,
-           ]);
+        if ($ficha->status) {
 
-           if($ficha->status){
+            $authorizedRoles = $ficha->roles->pluck('name');
 
-            $notificacion = new FichaCreada('Fichas', 'Se creado o modificado una ficha' , $ficha);
-            $user =User::find(1);
-            $user->notify($notificacion);
+            $users = User::whereHas('roles', static function ($query) use ($authorizedRoles) {
+                return $query->whereIn('name', $authorizedRoles);
+            })->get();
 
+            
+        $ficha = Ficha::with('category')->find($id);
 
-           // $users = null;
-           // Notification::send($users, $notificacion);
+            $notificacion = new FichaCreada(__('Fichas'),__( 'Se creado o modificado una ficha'), $ficha);
 
-           }
+           
 
-           return redirect()->route('platform.fichas.list');
+            Notification::send($users, $notificacion);
+        }
+
+        return redirect()->route('platform.fichas.list');
     }
 
+    /**
+ * @return array
+ */
+public function asyncGetData( $id): array
+{
+    $ficha = Ficha::find($id);
+  
+    return [
+        'id' => $id,
+        'version' => $ficha->version,
+        'status' => $ficha->status
+    ];
+}
 }

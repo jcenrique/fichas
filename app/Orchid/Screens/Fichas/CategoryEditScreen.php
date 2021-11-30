@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Fichas;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
@@ -142,7 +143,7 @@ class CategoryEditScreen extends Screen
      * @param  mixed $request
      * @return void
      */
-    public function createOrUpdate(Category $category, Request $request)
+    public function createOrUpdate(Category $category, CategoryRequest $request)
     {
 
 

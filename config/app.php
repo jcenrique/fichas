@@ -169,7 +169,9 @@ return [
         Spatie\EloquentSortable\EloquentSortableServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
-
+        OwenIt\Auditing\AuditingServiceProvider::class,
+       
+     
 
         /*
          * Application Service Providers...
@@ -237,7 +239,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-
+        
 
     ],
 

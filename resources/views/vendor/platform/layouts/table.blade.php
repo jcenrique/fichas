@@ -19,6 +19,7 @@
      data-table-slug="{{$slug}}"
 >
 
+
     <div class="table-responsive">
         <table class="table
             @if($striped) table-striped @endif
@@ -33,14 +34,16 @@
                 </tr>
             </thead>
             <tbody>
-
-            @foreach($rows as $source)
-                <tr>
-                    @foreach($columns as $column)
-                        {!! $column->buildTd($source) !!}
-                    @endforeach
-                </tr>
-            @endforeach
+            @if (!is_null($rows))
+                @foreach($rows as $source)
+                    <tr>
+                        @foreach($columns as $column)
+                            {!! $column->buildTd($source) !!}
+                        @endforeach
+                    </tr>
+                @endforeach
+            @endif
+           
 
             @if($total->isNotEmpty())
                 <tr>

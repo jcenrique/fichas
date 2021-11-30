@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImageColumnForCategoryTable extends Migration
+class AddObjectguidToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddImageColumnForCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table)
-        {
-            $table->string('image')->nullable()->after('created_at');
-        });
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('objectguid');
+});
     }
 
     /**
@@ -26,9 +25,8 @@ class AddImageColumnForCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table)
-        {
-            $table->dropColumn('image');
-        });
+        Schema::table('users', function($table) {
+            $table->dropColumn('objectguid');
+       });
     }
 }

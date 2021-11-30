@@ -11,18 +11,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable;
 
-
-
-class Capitulo extends Model  implements  Sortable
+class Capitulo extends Model  implements  Sortable,Auditable
 {
+
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     USE SoftDeletes;
     use Attachable;
-
+    
     use SortableTrait;
 
-    protected $withCount = [ 'audits'];
+    protected $withCount = [  'audits'];
     public $sortable = [
         'order_column_name' => 'order',
         'sort_when_creating' => true,
@@ -49,6 +50,13 @@ class Capitulo extends Model  implements  Sortable
         });
     }
 
+    public function generateTags(): array
+    {
+        return [
+            $this->ficha->version,
+          
+        ];
+    }
 
    public function buildSortQuery()
    {
@@ -66,12 +74,12 @@ class Capitulo extends Model  implements  Sortable
    }
 
    /**
- * {@inheritdoc}
- */
-public function auditable()
-{
-    return $this->morphTo()->withTrashed();
-}
+  * {@inheritdoc}
+  */
+// public function auditable()
+// {
+//     return $this->morphTo()->withTrashed();
+// }
 
 /**
  * {@inheritdoc}

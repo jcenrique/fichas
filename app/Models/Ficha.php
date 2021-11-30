@@ -6,21 +6,23 @@ use Illuminate\Support\Str;
 use Orchid\Screen\AsSource;
 use Laravel\Scout\Searchable;
 use Orchid\Filters\Filterable;
+use Orchid\Platform\Models\Role;
 use Orchid\Attachment\Attachable;
+
 use Illuminate\Support\Facades\Log;
 
-use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 use App\Orchid\Presenters\FichaPresenter;
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
-use Orchid\Platform\Models\Role;
 
-class Ficha extends Model
+class Ficha extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     use AsSource;
     use SoftDeletes ;
@@ -29,14 +31,9 @@ class Ficha extends Model
     use Searchable;
     use Notifiable;
   
+   
 
-
-
-
-    use \Askedio\SoftCascade\Traits\SoftCascadeTrait;
-
-
-    protected $withCount = [ 'audits', 'capitulos'];
+    protected $withCount = [  'capitulos','audits'];
 
 
     protected $fillable = [
@@ -45,7 +42,8 @@ class Ficha extends Model
         'user_id',
         'code',
         'description',
-        'status'
+        'status',
+        'version'
 
 
     ];
@@ -54,7 +52,8 @@ class Ficha extends Model
         'category_id',
         'code',
         'title',
-        'status'
+        'status',
+        'version'
     ];
 
     /**
@@ -67,6 +66,7 @@ class Ficha extends Model
         'title',
         'code',
         'status',
+        'version',
         'publish_at',
         'created_at',
         'deleted_at',
@@ -88,8 +88,13 @@ class Ficha extends Model
 
 
 	}
-
-
+    public function generateTags(): array
+    {
+        return [
+            $this->version,
+          
+        ];
+    }
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = Str::of($value)->upper();
@@ -149,13 +154,6 @@ class Ficha extends Model
         return $this->capitulos()->max('order') + 1;
     }
 
-    /**
- * {@inheritdoc}
- */
-public function auditable()
-{
-    return $this->morphTo()->withTrashed();
-}
 
 /**
  * {@inheritdoc}

@@ -21,7 +21,7 @@
             {!!
                 \Orchid\Screen\Fields\Input::make('name')
                 ->autofocus()
-                ->placeholder('Sheldon Cooper')
+                ->placeholder(__('Inserte su nombre'))
                 ->title('Name')
             !!}
         </div>
@@ -52,11 +52,15 @@
             !!}
         </div>
 
-        <div class="row align-items-center">
-            <div class="ml-auto col-md-6 col-xs-12">
+        
+        <div class="grid grid-cols-1 place-items-end ">
+           
+            <div class= "col-start-8 col-end-12">
                 <button id="button-login" type="submit" class="btn btn-default">
+                    <x-orchid-icon path="login" class="small me-2"/>
                     {{ __('Register') }}
                 </button>
+               
             </div>
         </div>
     </form>

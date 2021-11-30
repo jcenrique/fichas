@@ -1,8 +1,9 @@
 <th @empty(!$width) width="{{$width}}" @endempty class="text-{{$align}}" data-column="{{ $slug }}">
-    <div>
+    <div class="flex gap-2">
+        
         @if($sort)
             <a href="{{ $sortUrl }}"
-               class="@if(!is_sort($column)) text-muted @endif">
+               class="flex gap-2  @if(!is_sort($column)) text-muted @endif">
                 {{$title}}
 
                 <x-orchid-popover :content="$popover"/>

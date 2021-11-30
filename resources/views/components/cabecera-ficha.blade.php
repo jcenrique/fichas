@@ -50,7 +50,7 @@
             {{__('Versión')}}
         </div>
         <div  class="font-black text-red-800">
-            {{$ficha->audits_count}}
+            {{$ficha->version}}
         </div>
 
     </div>

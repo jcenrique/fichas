@@ -14,4 +14,6 @@ class Role extends ModelsRole
         return $this->belongsToMany(Ficha::class);
     }
 
+    
+
 }

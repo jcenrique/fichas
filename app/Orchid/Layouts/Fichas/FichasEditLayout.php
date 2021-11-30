@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Upload;
+use Orchid\Support\Facades\Layout;
 
 class FichasEditLayout extends Rows
 {
@@ -29,6 +30,7 @@ class FichasEditLayout extends Rows
      */
     protected function fields(): array
     {
+   
         return [
 
 
@@ -36,6 +38,7 @@ class FichasEditLayout extends Rows
 
                 Relation::make('ficha.user_id')
                     ->title('Autor')
+                    ->disabled($this->query['ficha']->status ? true : false)
                     ->value(Auth::user())
                     ->required()
                     ->fromModel(User::class, 'name'),
@@ -45,7 +48,7 @@ class FichasEditLayout extends Rows
 
 
             Input::make('ficha.title')
-
+            ->disabled($this->query['ficha']->status ? true : false)
                 ->title('Título')
                 ->required()
                ->class('form-control uppercase')
@@ -57,6 +60,7 @@ class FichasEditLayout extends Rows
 
             TextArea::make('ficha.description')
                 ->title('Description')
+                ->disabled($this->query['ficha']->status ? true : false)
                 ->required()
                 ->rows(3)
                 ->maxlength(200)
@@ -64,6 +68,7 @@ class FichasEditLayout extends Rows
 
                 Relation::make('ficha.roles')
                 ->fromModel(Role::class, 'name')
+                ->disabled($this->query['ficha']->status ? true : false)
                 ->multiple()
                 ->required()
                 ->title(__('Asignar roles a la ficha')),
@@ -71,10 +76,12 @@ class FichasEditLayout extends Rows
 
 
             Upload::make('ficha.attachment')
+               
                 ->style('border-width: 10px 1px;')
                 ->title('Todos los archivos'),
 
-
+               
+            
         ];
     }
 }

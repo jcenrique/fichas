@@ -46,9 +46,9 @@ p.ql-align-right{
 
 
     <div class="bg-white rounded shadow-sm p-4 py-4 d-flex flex-column">
-
+        @if (!$ficha->status)
         <div class="align-self-end mb-2">
-            {!! \ Orchid\Screen\Actions\ModalToggle::make()
+            {!! \Orchid\Screen\Actions\ModalToggle::make()
             ->class('btn btn-link text-blue-500 text-bold ')
             ->icon('plus')
             ->myTooltip('Nuevo capítulo')
@@ -63,7 +63,9 @@ p.ql-align-right{
 
             !!}
         </div>
-
+        @endif
+       
+       
         @foreach ($ficha->capitulos as $capitulo)
 
             <article @if ($loop->first)
@@ -87,9 +89,9 @@ p.ql-align-right{
 
 
                         </div>
-
+            @if (!$ficha->status)
                         <div class=" flex justify-center pt-3">
-                            {!!  \ Orchid\Screen\Actions\ModalToggle::make()
+                            {!!  \Orchid\Screen\Actions\ModalToggle::make()
                             //->class('btn btn-dark')
                             ->icon('pencil')
                             ->class('btn btn-link text-green-500 self-center text-bold ')
@@ -106,7 +108,7 @@ p.ql-align-right{
                             ]);
                             !!}
 
-                            {!!  \ Orchid\Screen\Actions\Button::make()
+                            {!!  \Orchid\Screen\Actions\Button::make()
 
                                 ->icon('trash')
                                 ->class('btn btn-link text-red-500 self-center text-bold ')
@@ -122,7 +124,7 @@ p.ql-align-right{
 
                                 {{-- cambiar el orden de los cpaitulos --}}
 
-                                {!!  \ Orchid\Screen\Actions\Button::make()
+                                {!!  \Orchid\Screen\Actions\Button::make()
 
                                     ->icon('sort-amount-asc')
                                     ->class('btn btn-link text-indigo-500 self-center text-bold ')
@@ -135,7 +137,7 @@ p.ql-align-right{
 
 
                                     !!}
-                                     {!!  \ Orchid\Screen\Actions\Button::make()
+                                     {!!  \Orchid\Screen\Actions\Button::make()
 
                                         ->icon('sort-amount-desc')
                                         ->class('btn btn-link text-indigo-500 self-center text-bold ')
@@ -150,6 +152,8 @@ p.ql-align-right{
                                         !!}
 
                         </div>
+@endif
+
                     </div>
                 </header>
 
@@ -173,7 +177,9 @@ p.ql-align-right{
 
 
 @else
+<div class="bg-white rounded shadow-sm p-4 py-4 d-flex flex-column text-gray-600 text-center text-xl ">
     Cuando se cree la ficha se podran crear los capitulos
+</div>
 
 @endif
 

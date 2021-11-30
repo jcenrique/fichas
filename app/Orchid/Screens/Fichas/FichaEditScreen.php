@@ -14,13 +14,18 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Http\Requests\FichaRequest;
+use App\Models\User;
 use App\Notifications\FichaCreada;
 use App\Orchid\Layouts\Fichas\AuditCapituloTable;
 use App\Orchid\Layouts\Fichas\AuditFichaTable;
 use App\Orchid\Layouts\Fichas\CodigoListener;
 use App\Orchid\Layouts\Fichas\FichasEditLayout;
 use App\Orchid\Layouts\Fichas\CapituloEditLayout;
+use App\Orchid\Layouts\Fichas\FichaAuditoriaAcordion;
+use App\Orchid\Layouts\Fichas\VersionEditLayout;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\View;
 use Orchid\Screen\Sight;
 use Orchid\Support\Color;
@@ -48,7 +53,7 @@ class FichaEditScreen extends Screen
     public $ficha;
 
     public $title;
-
+    public $status = 0;
 
     public $permission = [
         'platform.fichas.fichas'
@@ -68,7 +73,9 @@ class FichaEditScreen extends Screen
 
         if ($this->exists) {
             $this->name = 'Editar ficha';
-            $this->description = $ficha->title ;
+            $this->description = $ficha->title;
+            $this->ficha->load('attachment');
+            $this->status = $ficha->status;
         }
 
         return [
@@ -91,23 +98,44 @@ class FichaEditScreen extends Screen
     public function commandBar(): array
     {
 
+
         return [
 
-            Button::make($this->ficha->status?'Poner en borrador':'Publicar')
 
+
+            ModalToggle::make(__('Cambiar versión'))
+                ->modal('modalVersion')
+                ->icon('sort-numeric-asc')
+                ->method('cambiarVersion')
+                ->myTooltip(__('Cambia la versión de la ficha actual'))
+                ->canSee($this->exists && !$this->status)
+                ->popover($this->ficha->title),
+                
+
+            // ->method('cambiarVersion'),
+
+            Button::make(__('Poner en borrador'))
                 ->icon('pencil')
+                ->myTooltip(__('Poner en modo borrador la ficha actual'))
                 ->method('publicarFicha')
-               // ->parameters(['ficha' => $this->ficha])
-                ->canSee($this->exists),
+                ->canSee($this->exists && $this->status),
+
+            Button::make(__('Publicar'))
+                ->icon('pencil')
+                ->myTooltip(__('Publica la ficha actual y queda disponible a todos a los usuarios'))
+                ->method('publicarFicha')
+                ->confirm(__('Antes de publicar debe guardar los cambios o se perderán, ¿desea continuar?'))
+                ->canSee($this->exists && !$this->status),
 
             Button::make('Crear ficha')
-
                 ->icon('pencil')
                 ->method('createOrUpdate')
-                ->canSee(!$this->exists),
+                ->canSee((!$this->exists)),
+
             Button::make('Actualizar')
                 ->icon('note')
                 ->method('createOrUpdate')
+                ->disabled($this->ficha->status ? true : false)
                 ->canSee($this->exists),
 
             Button::make('Eliminar')
@@ -134,35 +162,38 @@ class FichaEditScreen extends Screen
             ]),
 
             Layout::tabs([
+
                 'Codificación' => [
-                    CodigoListener::class,
+                    $this->status == 0 ? CodigoListener::class : $layout = Layout::rows([
+                        Input::make('ficha.category.name')
+                            ->type('text')
+                            ->readonly()
+                            ->title(__('Categoría')),
+
+                        Input::make('ficha.code')
+                            ->type('text')
+                            ->readonly()
+                            ->title(__('Código')),
+                    ]),
                 ],
+
+
                 'Datos básicos'      => [
-                    FichasEditLayout::class,
+
+                    $this->status == 0 ? FichasEditLayout::class : Layout::view('layouts.fichas.datos-basicos', ['ficha' => $this->ficha])
 
                 ],
-                'Capitulos' =>  Layout::view('components.view-capitulos'),
 
 
+                'Capitulos' => Layout::view('components.view-capitulos'),
+
+                'Auditoría' => [
+
+                    $this->exists  ?  FichaAuditoriaAcordion::class : Layout::view('layouts.fichas.audit-null')
+                ],
 
 
-
-                'Auditoría' => Layout::accordion([
-                    'Cambios en ficha' => [
-                        AuditFichaTable::class,
-                    ],
-
-                    'Cambios en capitulos' => [
-                        AuditCapituloTable::class,
-                    ],
-
-
-
-                ]),
-
-
-            ])->activeTab('Codificación')
-            ,
+            ])->activeTab('Codificación'),
 
             Layout::modal('oneAsyncModal', CapituloEditLayout::class)
                 ->title('Nuevo Capítulo')
@@ -170,6 +201,12 @@ class FichaEditScreen extends Screen
                 ->async('asyncGetFicha'),
 
 
+
+            Layout::modal('modalVersion', VersionEditLayout::class)
+                ->title('Cambiar versión')
+                ->size(Modal::SIZE_SM)
+                ->async('cambiarVersion')
+               
 
 
         ];
@@ -187,9 +224,9 @@ class FichaEditScreen extends Screen
 
 
 
-        //Ficha::disableAuditing();
-
         $fichaId = $ficha->id;
+
+
         $category_id =  $request->get('category_id');
         $old_category_id =  $request->get('old_category_id');
         $code_ficha = $request->get('codigo');
@@ -200,14 +237,16 @@ class FichaEditScreen extends Screen
             array_merge($request->get('ficha'), ['code' =>  $code_ficha, 'category_id' => $category_id])
         );
 
-        $ficha->roles()->attach($request->get('ficha')['roles']);
+        if ($fichaId == null) {
+            $ficha->roles()->attach($request->get('ficha')['roles']);
+        } else {
+            $ficha->roles()->sync($request->get('ficha')['roles']);
+        }
 
         $ficha->attachment()->syncWithoutDetaching(
             $request->input('ficha.attachment', [])
         );
-        // $notificacion = new TaskCompleted('Creado post', 'Se ha creado el nuevo post');
-        //$user =User::find($ficha->author);
-        // $user->notify($notificacion);
+
         if (is_null($fichaId)) {
             //incrementar contador categoria
             $ficha->category()->increment('num');
@@ -219,33 +258,45 @@ class FichaEditScreen extends Screen
 
 
 
-      //  Ficha::enableAuditing();
+        //  Ficha::enableAuditing();
         return redirect()->route('platform.ficha.edit', [$ficha->id]);
     }
-     /**
+    /**
      * @param Post    $ficha
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
 
-    public function publicarFicha(Ficha $ficha, FichaRequest $request)
+    public function publicarFicha(Ficha $ficha, Request $request)
     {
+
+        //comprobar cambio de version
+
+
+
+
+
 
         $ficha->update([
             'status' =>  !$ficha->status,
         ]);
 
-        if($ficha->status){
+        if ($ficha->status) {
 
-            $data = array('name'=>"Virat Gandhi");
+            $authorizedRoles = $ficha->roles->pluck('name');
 
-            Mail::send(['text'=>'mail'], $data, function($message) {
-                $message->to('jcenrique170@gmail.com', 'Tutorials Point')->subject
-                   ('Laravel Basic Testing Mail');
-                $message->from('jcenrique170@gmail.com','Virat Gandhi');
-             });
+            $users = User::whereHas('roles', static function ($query) use ($authorizedRoles) {
+                return $query->whereIn('name', $authorizedRoles);
+            })->get();
+
+            $ficha = Ficha::with('category')->find($ficha->id);
+            $notificacion = new FichaCreada(__('Fichas'), __('Se creado o modificado una ficha'), $ficha);
+
+
+            Notification::send($users, $notificacion);
         }
+
 
         return redirect()->route('platform.ficha.edit', [$ficha->id]);
     }
@@ -269,7 +320,7 @@ class FichaEditScreen extends Screen
                 'error' => $ex,
                 'message' => 'Eliminar Ficha'
             ]);
-//
+            //
             report($ex);
             return;
         }
@@ -283,6 +334,7 @@ class FichaEditScreen extends Screen
 
     public function asyncCodigo($category_id = null, $old_category_id = null, $codigo = null, $old_codigo)
     {
+
 
         if ($old_category_id != null && $codigo != null &&  ($category_id == $old_category_id)) {
             $category_name = $old_codigo;
@@ -320,6 +372,32 @@ class FichaEditScreen extends Screen
         ];
     }
 
+    public function cambiarVersion(Ficha $ficha, Request $request)
+    {
+
+        $version = $request->get('ficha')['version'];
+        $ficha->update([
+            'version' =>  $version,
+        ]);
+
+        
+
+
+        return redirect()->route('platform.ficha.edit', [$ficha->id]);
+       
+    }
+
+    // public function asyncCambiarVersion(Ficha $ficha): array
+    // {
+       
+
+    //     return [
+    //         'ficha' => $ficha,
+
+
+    //     ];
+    //}
+
     /**
      * @param User    $user
      * @param Request $request
@@ -329,18 +407,19 @@ class FichaEditScreen extends Screen
 
         $ficha = Ficha::find($ficha_id);
         if ($request->capitulo['id'] != null) {
-            Capitulo::find($request->capitulo['id'])->update([
+            $capitulo = Capitulo::find($request->capitulo['id'])->update([
                 'title' => $request->capitulo['title'],
                 'body' => $request->capitulo['body'],
             ]);
         } else {
-            $ficha->capitulos()->create(
+            $capitulo = $ficha->capitulos()->create(
 
                 array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
             );
         }
 
-
+        // $version = $capitulo->currentVersion();
+        //  dd($version);
         // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
 
 
@@ -377,6 +456,4 @@ class FichaEditScreen extends Screen
 
         return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
-
-
 }

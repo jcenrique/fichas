@@ -25,7 +25,7 @@
     <div class="card-footer px-4 py-2">
 
         <a href="{{ route('fichas.list', $categoria->id) }}" class="btn btn-dark btn-block btn-rounded">
-            {{__('Mas información')}}
+            {{__('Ver fichas')}}
         </a>
 
     </div>

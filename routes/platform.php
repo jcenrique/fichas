@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Orchid\Screens\EmailSenderScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -10,10 +9,6 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
-use App\Orchid\Screens\Fichas\CategoryEditScreen;
-use App\Orchid\Screens\Fichas\CategoryListScreen;
-use App\Orchid\Screens\Fichas\FichaEditScreen;
-use App\Orchid\Screens\Fichas\FichaListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -22,6 +17,11 @@ use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
+
+use App\Orchid\Screens\Fichas\CategoryEditScreen;
+use App\Orchid\Screens\Fichas\CategoryListScreen;
+use App\Orchid\Screens\Fichas\FichaEditScreen;
+use App\Orchid\Screens\Fichas\FichaListScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +49,12 @@ Route::screen('profile', UserProfileScreen::class)
 
 // Platform > System > Users
 Route::screen('users/{user}/edit', UserEditScreen::class)
-    ->name('platform.systems.users.edit');
+    ->name('platform.systems.users.edit')
+    ->breadcrumbs(function (Trail $trail, $user) {
+        return $trail
+            ->parent('platform.systems.users')
+            ->push(__('User'), route('platform.systems.users.edit', $user));
+    });
 
 // Platform > System > Users > Create
 Route::screen('users/create', UserEditScreen::class)
@@ -102,7 +107,7 @@ Route::screen('example', ExampleScreen::class)
     ->breadcrumbs(function (Trail $trail) {
         return $trail
             ->parent('platform.index')
-            ->push(__('Example screen'));
+            ->push('Example screen');
     });
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
@@ -112,18 +117,7 @@ Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platfor
 Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.example.cards');
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
 
-Route::screen('email', EmailSenderScreen::class, 'platform.email')
-    ->name('platform.email')
-    ->breadcrumbs(
-        function (Trail $trail) {
-            return $trail
-                ->parent('platform.index')
-                ->push('Enviar correo');
-        }
-
-    );
-
-
+//Route::screen('idea', 'Idea::class','platform.screens.idea');
 //categorias
 
 Route::screen('category/{category?}', CategoryEditScreen::class)
@@ -168,5 +162,3 @@ Route::screen('fichas', FichaListScreen::class)
         );
 })
     ->name('platform.fichas.list');
-
-

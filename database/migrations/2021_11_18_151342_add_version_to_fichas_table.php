@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToFichasTable extends Migration
+class AddVersionToFichasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddStatusToFichasTable extends Migration
     public function up()
     {
         Schema::table('fichas', function (Blueprint $table) {
-            $table->boolean('status')->after('description')->default(false);
+            $table->integer('version')->default(1);
         });
     }
 
@@ -26,7 +26,7 @@ class AddStatusToFichasTable extends Migration
     public function down()
     {
         Schema::table('fichas', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('version');
         });
     }
 }

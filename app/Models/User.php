@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
-
-
 use Orchid\Platform\Models\User as Authenticatable;
 
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements LdapAuthenticatable
 {
     use Notifiable;
 
+    use AuthenticatesWithLdap;
 
     /**
      * The attributes that are mass assignable.
@@ -70,6 +72,4 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
-
-
 }

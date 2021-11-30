@@ -29,7 +29,8 @@ class PermissionServiceProvider extends ServiceProvider
             ->addPermission('platform.fichas.categories', 'Acceso a las categorias')
             ->addPermission('platform.fichas.fichas', 'Acceso a las fichas')
             ->addPermission('home', 'Acceso a la aplicación')
-            ->addPermission('fichas', 'Vista de vichas');
+            ->addPermission('fichas', 'Vista de fichas')
+            ->addPermission('fichas.edit', 'Editar  fichas');
 
         $dashboard->registerPermissions($permissions);
     }

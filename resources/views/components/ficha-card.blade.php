@@ -1,12 +1,16 @@
 @props(['ficha','category', 'i' ])
+<script src="{{ asset('js/admin/tailwind-random-color.min.js') }}" ></script>
 
-
-<article class="h-auto  card flex flex-row items-stretch rounded">
+<article class="h-auto  card grid grid-cols-3  rounded">
 
     {{-- <img class="h-full w-44 object-cover opacity-50 col-span-1 rounded-l" src="{{$ficha->category->image==null?'':$ficha->category->image;}}" alt=""> --}}
-    <img class="h-full w-32 object-cover opacity-50  rounded-l" src="https://loremflickr.com/320/240/software/all?random={{random_int(1, 100)}} alt="">
-
-    <div class="card-body w-full flex flex-wrap  content-between ">
+    {{-- <img class="h-full w-32 object-cover opacity-50  rounded-l" src="https://loremflickr.com/320/240/software/all?random={{random_int(1, 100)}} alt=""> --}}
+    <div id="fondo-{{$ficha->id}}" class="h-full w-full   col-span-1 rounded-l  flex flex-col justify-center items-center " >
+        <span class = "w-96 text-center  text-5xl transform -rotate-90 text-gray-100">{{$ficha->code}}</span>
+    </div>
+   
+   
+    <div class="card-body p-4 w-full flex flex-wrap  content-between col-span-2">
 
         <div class="flex flex-wrap justify-between items-baseline ">
             <div>
@@ -30,7 +34,7 @@
 
             <div class="flex  justify-between text-gray-500 mb-2">
                 <div class="">Capitulos: <small>  ({{$ficha->capitulos_count}})</small></div>
-                <div class="">Versiones: <small>  ({{$ficha->audits_count}})</small></div>
+                <div class="">Versiones: <small>  ({{$ficha->version}})</small></div>
 
             </div>
 
@@ -52,3 +56,14 @@
 
 
 </article>
+
+<script>
+    
+   
+   
+
+    var color = new TailwindColor(options_color).pick();
+    var d = document.getElementById("fondo-{{$ficha->id}}");
+d.className += color;
+
+</script>

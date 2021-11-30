@@ -29,11 +29,13 @@ class CategoryListLayout extends Table
      */
     protected function columns(): array
     {
+
+    
         return [
 
             TD::make('name', 'Nombre')
                 ->cantHide(false)
-                ->width('20%')
+               
                 ->sort()
                 ->filter(TD::FILTER_TEXT)
                 ->render(function (Category $category)
@@ -46,9 +48,12 @@ class CategoryListLayout extends Table
 
             TD::make('code', 'Código'),
 
+            
+            TD::make('category.version', 'Versión'),
+
             TD::make('description', 'Descripción')
                 ->cantHide(false)
-                ->width('60%')
+               
                 // ->render(function (Category $category)
                 // {
                 //     return   Str::of($category->description)->limit(100, ' ...');
@@ -73,7 +78,7 @@ class CategoryListLayout extends Table
 
             TD::make('Num. Fichas')
                 ->cantHide(false)
-                ->width('10%')
+                
                 ->render(
                     function (Category $category)
                     {
@@ -83,7 +88,7 @@ class CategoryListLayout extends Table
 
             TD::make('image', 'Imagen')
                 ->cantHide(false)
-                ->width('10%')
+               
                 ->render(function (Category $category)
                 {
 

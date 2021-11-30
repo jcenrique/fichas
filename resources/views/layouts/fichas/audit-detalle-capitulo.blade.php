@@ -23,6 +23,7 @@
 
 
         @foreach ($capitulo->audits as $key => $cambio_capitulo)
+       
         <tr>
 
 
@@ -55,7 +56,7 @@
 
                 </div>
 
-
+               
 
 
 
@@ -100,11 +101,12 @@
 
                 @endif
 
-
+               
 
             </td>
 
         </tr>
+       
         @endforeach
 
 

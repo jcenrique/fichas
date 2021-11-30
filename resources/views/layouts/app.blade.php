@@ -44,6 +44,7 @@
         <link rel="stylesheet" href="{{  $stylesheet }}">
     @endforeach
     <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/common.js') }}"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     @stack('stylesheets')
 

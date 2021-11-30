@@ -5,13 +5,15 @@ namespace App\Models;
 use App\Orchid\Presenters\CategoryPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class Category extends Model
 {
+   
     use HasFactory;
-    use AsSource;
+   use AsSource;
     use Filterable;
 
     protected $withCount = [ 'fichas'];
@@ -56,6 +58,10 @@ protected $allowedFilters = [
         return new CategoryPresenter($this);
     }
 
-    //incrementar contador
+    public function setCodeAttribute($value)
+    {
+        $this->attributes['code'] = mb_strtoupper($value);
+    }
 
+    
 }

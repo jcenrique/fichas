@@ -117,6 +117,12 @@
         td {
             padding: 3px;
         }
+
+        .ql-align-justify{
+            text-align: justify;
+  text-justify: inter-word;
+}
+       
     </style>
 </head>
 
@@ -184,7 +190,7 @@
 
                             <p style="color:gray;margin: 0px;">
                                 <b><span>
-                                        {{$ficha->audits_count}}
+                                        {{$ficha->version}}
                                     </span></b>
                             </p>
 
@@ -288,7 +294,7 @@
                 @foreach ($ficha->capitulos as $capitulo)
 
 
-                <div>
+                <div >
 
 
                     <p style="color:blue;margin: 2px; font-weight: bold; font-size: large;text-decoration: underline;">
@@ -296,18 +302,20 @@
 
                     </p>
 
-                    <p>
-
+                   
+                 
                         {!!$capitulo->body!!}
+                   
+                      
 
 
-                    </p>
+                    
 
 
 
 
                 </div>
-                <br><br>
+               
 
                 @endforeach
 

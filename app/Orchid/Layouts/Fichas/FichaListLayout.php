@@ -8,6 +8,7 @@ use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Select;
 
@@ -43,20 +44,21 @@ class FichaListLayout extends Table
                 }),
 
 
-            TD::make('category_id', 'Categoría')
-                ->width('15%')
-
+            TD::make('category_id', __('Categoría'))
+               
+            ->sort()
                 ->render(function (Ficha $ficha) {
                     return $ficha->category->name;
                 }),
 
-            TD::make('code', 'Codigo')
-                ->width('10%'),
+            TD::make('code', __('Código')),
+               
 
-            TD::make('title', 'Titulo')
+            TD::make('title', __('Titulo'))
 
                 ->cantHide(false)
-                ->width('20%')
+               
+                
                 ->sort()
                 ->filter(TD::FILTER_TEXT)
                 ->cantHide(false)
@@ -74,48 +76,54 @@ class FichaListLayout extends Table
 
 
 
-            TD::make('description', 'Descripción')
-                ->width('35%')
+            TD::make('description', __('Descripción'))
+               
                 ->render(function (Ficha $ficha) {
                     return  Str::of($ficha->description)->limit(100, ' ...');
                 })
                 ->cantHide(false),
 
-            TD::make('status', 'Publicado')
+            TD::make('version', __('Versión')),
+            
+            TD::make('status', __('Publicado'))
 
-                ->width('7%')
+               
                 ->render(function (Ficha $ficha) {
                     if ($this->query['withTrashed']) {
                         return  view('components.bool', ['bool' => $ficha->status]);
                     } else {
-                        return Button::make($ficha->status?'Publicada':'Borrador')
-                            ->myTooltip($ficha->status?'Poner en borrador':'Publicar ficha')
-                            ->confirm($ficha->status?'¿Desea cambiar el estado de la publicación a BORRADOR?':'¿Desea cambiar el estado de la publicación a PUBLICADA?')
+
+                        return ModalToggle::make($ficha->status?'Publicada':'Borrador')
+                        ->modal('modalStatus')
+                        ->myTooltip($ficha->status?'Poner en borrador':'Publicar ficha')
+                           
                             ->popover($ficha->title)
                             ->class($ficha->status?  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1':
                                                     'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 py-1')
                             ->method('publicar' )
-                            ->parameters(['id' => $ficha->id])
+                           // ->parameters(['id' => $ficha->id, 'status' => $ficha->status])
+                            ->asyncParameters([$ficha->id]);
                             ;
+                         
                     }
                 })
                 ->cantHide(false),
 
 
-            TD::make('created_at', 'Creada')
-                ->width('15%')
+            TD::make('created_at', __('Creada'))
+               
                 ->render(function (Ficha $ficha) {
                     return $ficha->created_at->format('d-m-Y');
                 }),
 
-            TD::make('updated_at', 'Modificada')
+            TD::make('updated_at', __('Modificada'))
                 ->canSee(!$this->query['withTrashed'])
 
                 ->render(function (Ficha $ficha) {
                     return $ficha->updated_at->format('d-m-Y');
                 }),
 
-            TD::make('deleted_at', 'Eliminada')
+            TD::make('deleted_at', __('Eliminada'))
 
 
                 ->canSee($this->query['withTrashed'])

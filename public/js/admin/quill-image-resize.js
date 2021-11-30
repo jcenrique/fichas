@@ -10,6 +10,8 @@
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
          // superscript/subscript
            // outdent/indent
+           [{ 'indent': '-1'}, { 'indent': '+1' }],
+
                         // text direction
 
     // custom dropdown

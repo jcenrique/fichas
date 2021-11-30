@@ -21,15 +21,15 @@ class CodigoListener extends Listener
     protected $targets = [
 
 
-    'category_id',
-    'old_category_id',
-    'codigo',
-    'old_codigo'
+        'category_id',
+        'old_category_id',
+        'codigo',
+        'old_codigo',
 
     ];
 
 
-   // protected $code_ficha ="";
+    // protected $code_ficha ="";
 
     /**
      * What screen method should be called
@@ -44,10 +44,9 @@ class CodigoListener extends Listener
 
 
 
-public function __construct()
-{
-
-}
+    public function __construct()
+    {
+    }
 
 
     /**
@@ -66,19 +65,21 @@ public function __construct()
                     ->fromModel(Category::class, 'name')
 
                     ->required(),
-                    Input::make('old_category_id')
+
+                Input::make('old_category_id')
                     ->type('hidden')
                     ->readonly(),
 
+                
 
                 Input::make('codigo')
                     ->title('Codificación')
                     ->required()
-                ->readonly(),
+                    ->readonly(),
 
                 Input::make('old_codigo')
-                ->type('hidden')
-                ->readonly(),
+                    ->type('hidden')
+                    ->readonly(),
 
 
 
