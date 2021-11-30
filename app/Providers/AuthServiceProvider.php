@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Models\Category;
 use App\Policies\CategoryPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Fortify\Fortify;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Fortify::authenticateUsing(function ($request) {
+            $validated = Auth::validate([
+                'name' => $request->username, //'samaccountname' sustituye a name en ldap
+                'password' => $request->password
+            ]);
+    
+            return $validated ? Auth::getLastAttempted() : null;
+        }); 
     }
 }

@@ -1,15 +1,16 @@
 <div class="mb-3">
 
     <label class="form-label">
-        {{__('Email address')}}
+        {{__('Nombre de usuario')}}
     </label>
 
-    {!!  \Orchid\Screen\Fields\Input::make('email')
-        ->type('email')
+    {!!  \Orchid\Screen\Fields\Input::make('username')
+        ->type('text')
+        ->value(old('username'))
         ->required()
         ->tabindex(1)
         ->autofocus()
-        ->placeholder(__('Enter your email'))
+        ->placeholder(__('Introduce tu nombre de usuario'))
     !!}
 </div>
 

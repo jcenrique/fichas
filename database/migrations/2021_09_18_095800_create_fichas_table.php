@@ -19,7 +19,9 @@ class CreateFichasTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('code', 25);
             $table->string('title',100)->unique();
-            $table->string('description');
+            $table->text('description');
+            $table->integer('version')->default(1);
+            $table->integer('status')->default(false);
 
             $table->timestamps();
             $table->softDeletes();
