@@ -58,6 +58,7 @@
                             {{__('Imprimir/Descargar')}}
                         </a>
                     </div>
+                    
                 </div>
 
 

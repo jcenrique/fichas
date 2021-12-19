@@ -7,7 +7,11 @@ use App\Policies\CategoryPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Laravel\Fortify\Fortify;
+use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,15 +32,29 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+       
         $this->registerPolicies();
 
+      
+        
         Fortify::authenticateUsing(function ($request) {
+           
             $validated = Auth::validate([
-                'name' => $request->username, //'samaccountname' sustituye a name en ldap
-                'password' => $request->password
+                'name' => $request->name,
+                'password' => $request->password,
+                'fallback' => [
+                    'name' => $request->name,
+                    'password' => $request->password,
+                ],
             ]);
-    
+           
             return $validated ? Auth::getLastAttempted() : null;
-        }); 
+        });
+
+        RateLimiter::for("login", function () {
+            Limit::perMinute(50);
+        });
+        
     }
 }

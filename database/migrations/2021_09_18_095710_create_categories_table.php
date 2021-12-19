@@ -19,6 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('num')->default(1);
             $table->string('name',100)->unique();
             $table->text('description');
+            $table->text('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

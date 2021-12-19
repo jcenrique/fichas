@@ -89,53 +89,36 @@ public function fichaPDF ($id)
 
 }
 
-// public function fichaPDF($id){
-
-//    //dd( public_path('storage') . '\plantillas\Plantillas Avisos.docx' );
-
-//    //abro plantilla y pongo el encabezado guardo el documento y lo vuelvo abrir para añadir
-//      $template = public_path('storage') . '\plantillas\Plantilla Avisos.docx';
-//     // $worDoc = new TemplateProcessor($template);
-//      $ficha= Ficha::find($id);
-//     // //dd($ficha->capitulos->first()->body);
-
-//     //  $worDoc->setValue('categoria', $ficha->category->name);
-
-//     //  $worDoc->setValue('codigo', $ficha->code);
-
-
-//     //  $worDoc->setValue('titulo', $ficha->title);
-
-//     //  $worDoc->setValue('descripcion', $ficha->description);
-
-
-//     //  $worDoc->setValue('version', $ficha->audits_count);
-
-//     //  $worDoc->setValue('fecha', $ficha->updated_at->format('d-M-Y'));
-//     //  $worDoc->saveAs('pruebas.docx');
-
-
-
-
-
-//      $phpWord = new \PhpOffice\PhpWord\PhpWord();
-//      $phpWord->loadTemplate($template);
-
-
-//         $html =   $ficha->body;
-
-
-//         \PhpOffice\PhpWord\Shared\Html::addHtml('contenido', $html, false, false);
-// //$phpWord->setValue('contenido' , );
-
-//       //  $section->addImage("./images/Logotipo ETS.jpg");
-
-//        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-//         $objWriter->save('pruebas1.docx');
-//         return response()->download(public_path('pruebas1.docx'));
-
-// }
-
+public function ldapConect()
+{
+    
+ 
+    $ldap_con = ldap_connect("ldap.forumsys.com",389);
+    $ldap_dn = "cn=read-only-admin,dc=example,dc=com";
+    $ldap_ps = "password";
+ 
+    ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
+ 
+    if (ldap_bind($ldap_con, $ldap_dn, $ldap_ps)):
+ 
+        echo "Ldap binding successful";
+ 
+        /*@ Getting data START */ 
+         
+        $filter = ("uid=newton"); 
+         
+        $results = ldap_search($ldap_con, "dc=example,dc=com", $filter);  
+         
+        $search_result = ldap_get_entries($ldap_con, $results);  
+ 
+        echo var_dump($search_result);
+        /*@ Getting data ENDS */   
+ 
+     else:
+ 
+          echo "Ldap binding not successful";
+     endif;
+}
 
 
 }

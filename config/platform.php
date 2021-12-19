@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'auth'  => false,
+    'auth'  => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -111,9 +111,7 @@ return [
     'resource' => [
         'stylesheets' => [],
         'scripts'     => [
-            "/js/admin/image-resize.min.js",
-            // "/js/admin/ImageResize.js",
-             "/js/admin/quill-image-resize.js",
+           
              
         ],
     ],

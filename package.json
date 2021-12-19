@@ -21,6 +21,6 @@
         "@fortawesome/fontawesome-free": "^5.15.4",
         "@videsk/tailwind-random-color": "^0.2.0-beta",
         "font-awesome": "^4.7.0",
-        "quill": "^1.3.7"
+        "tinymce": "^5.10.2"
     }
 }

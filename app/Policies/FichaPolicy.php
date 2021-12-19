@@ -44,7 +44,7 @@ class FichaPolicy
      */
     public function view(User $user, Ficha $ficha)
     {
-        return true;
+        return $ficha->status;
     }
 
     /**

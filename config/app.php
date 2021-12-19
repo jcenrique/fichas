@@ -171,7 +171,8 @@ return [
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
        
-     
+        //App\Providers\FortifyServiceProvider::class,
+        
 
         /*
          * Application Service Providers...
@@ -181,7 +182,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        
         App\Providers\PermissionServiceProvider::class,
 
 

@@ -35,6 +35,8 @@ class UserListLayout extends Table
                     return new Persona($user->presenter());
                 }),
 
+               
+
             TD::make('email', __('Email'))
                 ->sort()
                 ->cantHide()
@@ -48,6 +50,8 @@ class UserListLayout extends Table
                             'user' => $user->id,
                         ]);
                 }),
+
+
 
             TD::make('updated_at', __('Last edit'))
                 ->sort()

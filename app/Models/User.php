@@ -3,15 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
+use Laravel\Scout\Searchable;
 use Orchid\Platform\Models\User as Authenticatable;
 
 use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory ;
 
 class User extends Authenticatable implements LdapAuthenticatable
 {
     use Notifiable;
+    use  Filterable;
+    use Searchable;
+    use AsSource;
+    use HasFactory;
+   
 
     use AuthenticatesWithLdap;
 
@@ -21,8 +30,13 @@ class User extends Authenticatable implements LdapAuthenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+       
+        
         'email',
+        'name',
+        'guid',
+        'domain',
+       
         'password',
         'permissions',
     ];
@@ -56,6 +70,7 @@ class User extends Authenticatable implements LdapAuthenticatable
     protected $allowedFilters = [
         'id',
         'name',
+       
         'email',
         'permissions',
     ];
@@ -68,8 +83,21 @@ class User extends Authenticatable implements LdapAuthenticatable
     protected $allowedSorts = [
         'id',
         'name',
+       
         'email',
         'updated_at',
         'created_at',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if ($user->permissions === null) {
+                // if tags are not provided on creation
+                $user->permissions=  ['home' => true];  // set empty json array
+            }
+            
+        });
+    }
 }

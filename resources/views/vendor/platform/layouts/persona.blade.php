@@ -6,7 +6,7 @@
             </span>
         @endempty
         <div class="mt-2 mt-sm-0 mt-md-2 mt-xl-0">
-            <p class="mb-0">{{ $title }}</p>
+            <p class="mb-0">{{ $title }}</p> 
             <small class="text-muted">{{ $subTitle }}</small>
         </div>
     </div>

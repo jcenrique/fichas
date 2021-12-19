@@ -22,8 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.core.css">
+   
     @stack('head')
 
     <meta name="turbo-root" content="{{  Dashboard::prefix() }}">
@@ -36,6 +35,8 @@
     <script src="{{ orchid_mix('/js/manifest.js','orchid') }}" type="text/javascript"></script>
     <script src="{{ orchid_mix('/js/vendor.js','orchid') }}" type="text/javascript"></script>
     <script src="{{ orchid_mix('/js/orchid.js','orchid') }}" type="text/javascript"></script>
+
+
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
 
     <!-- The "defer" attribute is important to make sure Alpine waits for Livewire to load first. -->
@@ -45,7 +46,8 @@
     @endforeach
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ asset('js/common.js') }}"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+
     @stack('stylesheets')
 
     @foreach(Dashboard::getResource('scripts') as $scripts)

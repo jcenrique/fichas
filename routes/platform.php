@@ -9,6 +9,7 @@ use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
+use App\Orchid\Screens\Fichas\CapituloEditScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -162,3 +163,7 @@ Route::screen('fichas', FichaListScreen::class)
         );
 })
     ->name('platform.fichas.list');
+
+    Route::screen('capitulo/{capitulo?}', CapituloEditScreen::class)
+   
+    ->name('platform.capitulo.edit');

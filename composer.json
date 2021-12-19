@@ -22,6 +22,7 @@
         "owen-it/laravel-auditing": "^12.0",
         "phpoffice/phpword": "^0.18.2",
         "spatie/eloquent-sortable": "^3.11",
+       
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5"
     },
     "require-dev": {

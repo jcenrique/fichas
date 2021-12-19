@@ -3,9 +3,12 @@
 namespace App\Orchid\Layouts\Fichas;
 
 use Orchid\Screen\Field;
+
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
+
 use Orchid\Screen\Layouts\Rows;
+
 
 class CapituloEditLayout extends Rows
 {
@@ -39,7 +42,8 @@ class CapituloEditLayout extends Rows
              Quill::make('capitulo.body')
              ->required()
                  ->title('Contenido'),
-
+            
+          
         ];
     }
 }

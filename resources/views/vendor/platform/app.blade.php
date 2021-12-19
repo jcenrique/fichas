@@ -24,8 +24,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.core.css">
 
     @stack('head')
 
@@ -46,8 +44,9 @@
         <link rel="stylesheet" href="{{  $stylesheet }}">
     @endforeach
     <script src="{{ mix('js/app.js') }}" defer></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
+    
+    <script src="{{ asset('node_modules/tinymce/tinymce.js') }}"></script>
+   
     @stack('stylesheets')
 
     @foreach(Dashboard::getResource('scripts') as $scripts)

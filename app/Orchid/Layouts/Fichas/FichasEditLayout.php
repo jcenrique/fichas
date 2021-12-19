@@ -2,14 +2,16 @@
 
 namespace App\Orchid\Layouts\Fichas;
 
-use App\Models\Role;
+
 use App\Models\User;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Layouts\Rows;
 use Orchid\Screen\Fields\Relation;
 use Illuminate\Support\Facades\Auth;
+use Orchid\Platform\Models\Role;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Upload;
 use Orchid\Support\Facades\Layout;
@@ -36,7 +38,7 @@ class FichasEditLayout extends Rows
 
 
 
-                Relation::make('ficha.user_id')
+                Select::make('ficha.user_id')
                     ->title('Autor')
                     ->disabled($this->query['ficha']->status ? true : false)
                     ->value(Auth::user())
@@ -66,14 +68,15 @@ class FichasEditLayout extends Rows
                 ->maxlength(200)
                 ->placeholder('Breve descripción para vista previa'),
 
-                Relation::make('ficha.roles')
+            Select::make('ficha.roles')
                 ->fromModel(Role::class, 'name')
+               
                 ->disabled($this->query['ficha']->status ? true : false)
                 ->multiple()
                 ->required()
                 ->title(__('Asignar roles a la ficha')),
 
-
+               
 
             Upload::make('ficha.attachment')
                

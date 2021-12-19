@@ -23,13 +23,15 @@ class UserEditLayout extends Rows
                 ->max(255)
                 ->required()
                 ->title(__('Name'))
-                ->placeholder(__('Name')),
+                ->placeholder(__('Introduzca su nombre completo')),
+                
+           
 
             Input::make('user.email')
                 ->type('email')
                 ->required()
                 ->title(__('Email'))
-                ->placeholder(__('Email')),
+                ->placeholder(__('Introduzca un nombre de Email')),
         ];
     }
 }

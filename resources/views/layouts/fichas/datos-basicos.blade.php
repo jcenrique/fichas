@@ -4,6 +4,7 @@ use App\Models\User;
 
 use App\Models\Role;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Upload;
 @endphp
@@ -33,6 +34,13 @@ use Orchid\Screen\Fields\Upload;
         ->value($ficha->description)
         ->disabled(true)
 
+!!} 
+
+{!! Relation::make( )
+    ->title(__('Roles'))
+    ->fromModel(Role::class, 'name')
+    ->multiple()
+    ->title('Choose your ideas');
 !!} 
 
 <label  class="form-label">{{__('Roles')}}

@@ -162,6 +162,7 @@ class UserEditScreen extends Screen
                 'required',
                 Rule::unique(User::class, 'email')->ignore($user),
             ],
+           
         ]);
 
         $permissions = collect($request->get('permissions'))

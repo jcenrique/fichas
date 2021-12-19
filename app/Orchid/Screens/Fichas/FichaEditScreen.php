@@ -16,18 +16,15 @@ use Orchid\Support\Facades\Layout;
 use App\Http\Requests\FichaRequest;
 use App\Models\User;
 use App\Notifications\FichaCreada;
-use App\Orchid\Layouts\Fichas\AuditCapituloTable;
-use App\Orchid\Layouts\Fichas\AuditFichaTable;
 use App\Orchid\Layouts\Fichas\CodigoListener;
 use App\Orchid\Layouts\Fichas\FichasEditLayout;
-use App\Orchid\Layouts\Fichas\CapituloEditLayout;
+
 use App\Orchid\Layouts\Fichas\FichaAuditoriaAcordion;
 use App\Orchid\Layouts\Fichas\VersionEditLayout;
-use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Notification;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Layouts\View;
-use Orchid\Screen\Sight;
+
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Alert;
 
@@ -185,7 +182,10 @@ class FichaEditScreen extends Screen
                 ],
 
 
+
                 'Capitulos' => Layout::view('components.view-capitulos'),
+
+                //'Capitulos1' => Layout::view('components.edit-capitulo',['capitulo' => $this->ficha->capitulos[0]]),
 
                 'Auditoría' => [
 
@@ -195,12 +195,17 @@ class FichaEditScreen extends Screen
 
             ])->activeTab('Codificación'),
 
-            Layout::modal('oneAsyncModal', CapituloEditLayout::class)
-                ->title('Nuevo Capítulo')
-                ->size(Modal::SIZE_LG)
-                ->async('asyncGetFicha'),
+            // Layout::modal('oneAsyncModal', CapituloEditLayout::class)
+            //     ->title('Nuevo Capítulo')
+            //     ->size(Modal::SIZE_LG)
+            //     ->async('asyncGetFicha'),
 
-
+                // Layout::modal('oneAsyncModal',[
+                //     Layout::view('components.edit-capitulo',['ficha' => $this->ficha])
+                // ])
+                // ->title('Nuevo Capítulo')
+                // ->size(Modal::SIZE_LG)
+                // ->async('asyncGetFicha'),
 
             Layout::modal('modalVersion', VersionEditLayout::class)
                 ->title('Cambiar versión')
@@ -339,9 +344,9 @@ class FichaEditScreen extends Screen
         if ($old_category_id != null && $codigo != null &&  ($category_id == $old_category_id)) {
             $category_name = $old_codigo;
         } else if ($old_category_id != null && ($category_id != $old_category_id)) {
-            $category_name = Category::find($category_id)->num . '-' . date('y') . '-' . Category::find($category_id)->code;
+            $category_name = Category::find($category_id)->num . '-'  . Category::find($category_id)->code;
         } else {
-            $category_name = Category::find($category_id)->num . '-' . date('y') . '-' . Category::find($category_id)->code;
+            $category_name = Category::find($category_id)->num . '-' . Category::find($category_id)->code;
         }
 
         return [
@@ -405,12 +410,15 @@ class FichaEditScreen extends Screen
     public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
     {
 
+         dd($request->all());
         $ficha = Ficha::find($ficha_id);
-        if ($request->capitulo['id'] != null) {
-            $capitulo = Capitulo::find($request->capitulo['id'])->update([
-                'title' => $request->capitulo['title'],
-                'body' => $request->capitulo['body'],
+
+        if ($request->id != null) {
+            $capitulo = Capitulo::find($request->id)->update([
+                'title' => $request->title,
+                'body' => $request->body,
             ]);
+          
         } else {
             $capitulo = $ficha->capitulos()->create(
 
@@ -422,12 +430,40 @@ class FichaEditScreen extends Screen
         //  dd($version);
         // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
 
-
+  
 
         Toast::info(__('Capitulo was saved.'));
 
         return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
+
+    // public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
+    // {
+
+    //     //dd($request->all());
+    //     $ficha = Ficha::find($ficha_id);
+    //     if ($request->capitulo['id'] != null) {
+    //         $capitulo = Capitulo::find($request->capitulo['id'])->update([
+    //             'title' => $request->capitulo['title'],
+    //             'body' => $request->capitulo['body'],
+    //         ]);
+    //     } else {
+    //         $capitulo = $ficha->capitulos()->create(
+
+    //             array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
+    //         );
+    //     }
+
+    //     // $version = $capitulo->currentVersion();
+    //     //  dd($version);
+    //     // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
+
+
+
+    //     Toast::info(__('Capitulo was saved.'));
+
+    //     return redirect()->route('platform.ficha.edit', [$ficha_id]);
+    // }
 
     public function removeCapitulo($ficha_id, $capitulo_id)
     {

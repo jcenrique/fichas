@@ -4,9 +4,9 @@
         {{__('Nombre de usuario')}}
     </label>
 
-    {!!  \Orchid\Screen\Fields\Input::make('username')
+    {!!  \Orchid\Screen\Fields\Input::make('name')
         ->type('text')
-        ->value(old('username'))
+        ->value(old('name'))
         ->required()
         ->tabindex(1)
         ->autofocus()
