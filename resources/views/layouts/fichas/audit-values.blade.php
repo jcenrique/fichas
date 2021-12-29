@@ -4,16 +4,16 @@
 
     <div>
         <div class="text-sm text-gray-500 text-left">
-            Valor Anterior
+            {{__('Valor Anterior')}}
 
         </div>
         <div class="text-gray-700  text-left pl-6 ">
             {{$old_value}}
         </div>
         <div class="text-sm text-green-500 text-left">
-            Valor creado el
+            {{__('Valor creado el')}}
             {{$audit->created_at->format('d-M-Y')}}
-            por el usuario: {{$audit->user->name}}
+            {{__('por el usuario:')}} {{$audit->user->name}}
         </div>
         <div class="text-green-700  text-left pl-6 ">
             {{$new_value}}

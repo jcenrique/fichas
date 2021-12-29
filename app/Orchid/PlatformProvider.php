@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
@@ -19,8 +21,7 @@ class PlatformProvider extends OrchidServiceProvider
     public function boot(Dashboard $dashboard): void
     {
         parent::boot($dashboard);
-
-        // ...
+      
     }
 
     /**
@@ -74,8 +75,10 @@ class PlatformProvider extends OrchidServiceProvider
     {
         return [
             ItemPermission::group(__('System'))
+                ->addPermission('platform.systems.profile', __('Profile'))
                 ->addPermission('platform.systems.roles', __('Roles'))
-                ->addPermission('platform.systems.users', __('Users')),
+                ->addPermission('platform.systems.users', __('Users'))
+                
         ];
     }
 
@@ -86,7 +89,7 @@ class PlatformProvider extends OrchidServiceProvider
     {
         return [
             // ...Models
-            // \App\Models\User::class
+          //   \App\Models\Ficha::class
         ];
     }
 }

@@ -21,6 +21,7 @@ use Tabuna\Breadcrumbs\Trail;
 
 use App\Orchid\Screens\Fichas\CategoryEditScreen;
 use App\Orchid\Screens\Fichas\CategoryListScreen;
+use App\Orchid\Screens\Fichas\FichaCapituloEditScreen;
 use App\Orchid\Screens\Fichas\FichaEditScreen;
 use App\Orchid\Screens\Fichas\FichaListScreen;
 
@@ -36,8 +37,8 @@ use App\Orchid\Screens\Fichas\FichaListScreen;
 */
 
 // Main
-Route::screen('/main', PlatformScreen::class)
-    ->name('platform.main');
+// Route::screen('/main', PlatformScreen::class)
+//     ->name('platform.main');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
@@ -102,23 +103,6 @@ Route::screen('roles', RoleListScreen::class)
             ->push(__('Roles'), route('platform.systems.roles'));
     });
 
-// Example...
-Route::screen('example', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.index')
-            ->push('Example screen');
-    });
-
-Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
-Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
-Route::screen('example-charts', ExampleChartsScreen::class)->name('platform.example.charts');
-Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
-Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.example.cards');
-Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
-
-//Route::screen('idea', 'Idea::class','platform.screens.idea');
 //categorias
 
 Route::screen('category/{category?}', CategoryEditScreen::class)
@@ -167,3 +151,10 @@ Route::screen('fichas', FichaListScreen::class)
     Route::screen('capitulo/{capitulo?}', CapituloEditScreen::class)
    
     ->name('platform.capitulo.edit');
+
+    Route::screen('ficha_capitulo/{ficha?}', FichaCapituloEditScreen::class)
+   
+    ->name('platform.ficha-capitulo.edit');
+
+
+    

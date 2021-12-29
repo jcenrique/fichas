@@ -3,12 +3,13 @@
         class="btn btn-link text-start p-4">
     @php
         if ($notification->read()) {
-          $color_notification ="text-green-600";
+            $color_notification ="text-green-600";
         }else{
              
             $color_notification ="  text-red-600";
         }
     @endphp
+
     <span class="align-self-start text-{{ $notification->data['type'] }} @if($notification->read()) opacity @endif pull-left m-t-sm small">
         <x-orchid-icon path="fa.circle" class="me-2 {{$color_notification}}"/>
            
@@ -16,7 +17,7 @@
 
     <span class="w-full @if($notification->read()) opacity-50 @endif  ">
         <span class="w-100 w-b-k w-s-n">{{$notification->data['title'] ?? ''}}</span>
-        <small class="text-muted ps-1">/ {{ $notification->created_at->diffForHumans() }}</small>
+        <small class="text-muted ps-1">/ {{ $notification->created_at->diffForHumans() }} @if($notification->read()) <span class="text-green-600"> ({{__('leída')}}) </span>@endif</small>
         <br>
         <small class="text-muted w-100 w-b-k w-s-n">
             @if ($notification->data['message'])

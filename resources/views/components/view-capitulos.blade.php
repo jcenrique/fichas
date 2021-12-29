@@ -1,38 +1,6 @@
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-<style>
-    ol {
-        list-style: decimal;
-        margin-left: 2em;
-    }
 
-    ul {
-        list-style: disc;
-        margin-left: 2em;
-    }
-
-    h2 {
-        display: block;
-        font-size: 1.5em;
-
-
-    }
-
-    h1 {
-        display: block;
-        font-size: 2em;
-
-
-    }
-
-    p.ql-align-center {
-        text-align: center;
-    }
-
-    p.ql-align-right {
-        text-align: right;
-    }
-</style>
-
+<link href="{{ asset('css/ficha.css') }}" rel="stylesheet">
 <fieldset class="mb-3" data-async>
 
     @empty(!$title)
@@ -42,26 +10,27 @@
         </legend>
     </div>
     @endempty
+  
     @if ($ficha->id)
 
 
     <div class="bg-white rounded shadow-sm p-4 py-4 d-flex flex-column">
         @if (!$ficha->status)
         <div class="align-self-end mb-2">
-            {!! \Orchid\Screen\Actions\ModalToggle::make()
-            ->class('btn btn-link text-blue-500 text-bold ')
-            ->icon('plus')
-            ->myTooltip('Nuevo capítulo')
-            ->modal('oneAsyncModal')
-            ->modalTitle($ficha->title)
-            ->method('saveCapitulo')
-            ->asyncParameters([
-            'ficha_id' => $ficha->id,
+            
+{!!
+    \Orchid\Screen\Actions\Link::make('Añadir cápitulo')
+  
+    ->myTooltip('Añadir nuevo capitulo')
 
+    ->class('btn btn-primary')
+    ->icon('fa.plus')
+    ->route('platform.ficha-capitulo.edit',['ficha' => $ficha])
+    
 
-            ]);
+    !!}
 
-            !!}
+   
         </div>
         @endif
 
@@ -89,7 +58,7 @@
                         <i x-on:click="open=!open" x-show="open === false"
                             class="fa fa-chevron-circle-down cursor-pointer  text-blue-500 mr-2" data-toggle="tooltip"
                             data-placement="top" title="Desplegar!"></i>
-                        <h1 class="font-bold text-lg text-gray-600">{{$capitulo->title}}</h1>
+                        <h1 x-on:click="open=!open" class="font-bold text-lg cursor-pointer select-none text-gray-600 hover:text-blue-700">{{$capitulo->title}}</h1>
 
 
                     </div>
@@ -159,7 +128,7 @@
             </header>
 
 
-            <div class="border-t-1 bg-white py-2 px-4  " x-show="open">
+            <div class="border-t-1 bg-white py-2 px-4" x-show="open">
                
 
                
@@ -184,7 +153,7 @@
 
         @else
         <div class="bg-white rounded shadow-sm p-4 py-4 d-flex flex-column text-gray-600 text-center text-xl ">
-            Cuando se cree la ficha se podran crear los capitulos
+            {{__('Cuando se cree la ficha se podran crear los capitulos')}}
         </div>
 
         @endif

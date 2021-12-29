@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts\Fichas;
 
 use App\Models\Category;
 use App\Models\Ficha;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
@@ -25,6 +26,7 @@ class CodigoListener extends Listener
         'old_category_id',
         'codigo',
         'old_codigo',
+     
 
     ];
 
@@ -60,11 +62,11 @@ class CodigoListener extends Listener
 
 
                 Relation::make('category_id')
+                ->required()
+                    ->title(__('Seleccionar categoría'))
+                    ->fromModel(Category::class, 'name'),
 
-                    ->title('Categoría')
-                    ->fromModel(Category::class, 'name')
-
-                    ->required(),
+                 
 
                 Input::make('old_category_id')
                     ->type('hidden')
@@ -73,7 +75,7 @@ class CodigoListener extends Listener
                 
 
                 Input::make('codigo')
-                    ->title('Codificación')
+                    ->title(__('Codificación'))
                     ->required()
                     ->readonly(),
 

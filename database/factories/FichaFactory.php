@@ -16,7 +16,8 @@ class FichaFactory extends Factory
     public function definition()
     {
         $category = Category::all()->random();
-        return [
+        
+        $data =[
             'category_id' =>  $category->id,
             'user_id' =>  User::all()->random()->id,
             'code' => $category->num . '-' . $category->code,
@@ -25,5 +26,9 @@ class FichaFactory extends Factory
             'status' =>   $this->faker->randomElement([0 ,1]),
             
         ];
+        $category->increment('num');
+
+        return  $data;
+       
     }
 }

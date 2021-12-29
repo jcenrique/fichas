@@ -32,59 +32,45 @@ class FichasEditLayout extends Rows
      */
     protected function fields(): array
     {
-   
+
         return [
 
-
-
-
-                Select::make('ficha.user_id')
-                    ->title('Autor')
-                    ->disabled($this->query['ficha']->status ? true : false)
-                    ->value(Auth::user())
-                    ->required()
-                    ->fromModel(User::class, 'name'),
-
-
-
-
+            Relation::make('ficha.user_id')
+                ->title(__('Autor'))
+                ->disabled($this->query['ficha']->status ? true : false)
+                ->value(Auth::user())
+                ->required()
+                ->fromModel(User::class, 'name'),
 
             Input::make('ficha.title')
-            ->disabled($this->query['ficha']->status ? true : false)
-                ->title('Título')
+                ->disabled($this->query['ficha']->status ? true : false)
+                ->title(__('Título'))
                 ->required()
-               ->class('form-control uppercase')
-
-                ->placeholder('Introducir el título')
-                ->help('Especificar una descripción corta para el título de la ficha.'),
-
-
+                ->class('form-control uppercase')
+                ->placeholder(__('Introducir el título'))
+                ->help(__('Especificar una descripción corta para el título de la ficha.')),
 
             TextArea::make('ficha.description')
-                ->title('Description')
+                ->title(__('Description'))
                 ->disabled($this->query['ficha']->status ? true : false)
                 ->required()
                 ->rows(3)
                 ->maxlength(200)
-                ->placeholder('Breve descripción para vista previa'),
+                ->placeholder(__('Breve descripción para vista previa')),
 
-            Select::make('ficha.roles')
+            Relation::make('ficha.roles')
                 ->fromModel(Role::class, 'name')
-               
                 ->disabled($this->query['ficha']->status ? true : false)
                 ->multiple()
                 ->required()
                 ->title(__('Asignar roles a la ficha')),
 
-               
-
             Upload::make('ficha.attachment')
-               
                 ->style('border-width: 10px 1px;')
-                ->title('Todos los archivos'),
+                ->title(__('Todos los archivos')),
 
-               
-            
+
+
         ];
     }
 }

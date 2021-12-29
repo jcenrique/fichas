@@ -34,9 +34,9 @@ class FichaController extends Controller
         if ($category_id) {
             $fichas = Ficha::where('category_id' ,$category_id )
                                     ->where('status',1)
-                                ->paginate();
+                                ->paginate(6);
         } else {
-            $fichas = Ficha::where('status',1)->paginate();
+            $fichas = Ficha::where('status',1)->paginate(6);
         }
 
 

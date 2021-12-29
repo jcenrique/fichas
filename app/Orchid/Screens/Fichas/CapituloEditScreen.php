@@ -4,7 +4,7 @@ namespace App\Orchid\Screens\Fichas;
 
 use App\Http\Requests\CapituloRequest;
 use App\Models\Capitulo;
-use Illuminate\Http\Request;
+use App\Models\Ficha;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
@@ -20,23 +20,31 @@ class CapituloEditScreen extends Screen
     public $name = 'Editar Capitulo';
 
     public  $capitulo;
+    
+   
     /**
      * Query data.
      *
      * @return array
      */
+
+     public function __construct()
+     {
+         
+        // $ficha->ficha = $ficha;
+     }
     public function query(Capitulo $capitulo): array
     {
-      
-     
+        
             $this->exists= $capitulo->exists;
         if ($this->exists){
-            $this->name= 'Editar capítulo';
+            $this->name= __('Editar capítulo');
         }
-
+       
+     
         return [
-            'capitulo' =>$capitulo
-
+            'capitulo' =>$capitulo,
+           
         ];
         
     }
@@ -49,11 +57,12 @@ class CapituloEditScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Button::make('Actualizar')
+            Button::make(__('Actualizar'))
                 ->icon('note')
                 ->method('createOrUpdate')
-                ->canSee($this->exists),
-
+              
+            
+            
         ];
     }
 
@@ -73,13 +82,15 @@ class CapituloEditScreen extends Screen
     public function createOrUpdate(Capitulo $capitulo, CapituloRequest $request)
     {
 
-     
+       
 
         $capitulo->fill($request->all())->save();
 
-        Toast::info('Registro guardado con éxito');
+        Toast::info(__('Registro guardado con éxito'));
 
         return redirect()->route('platform.ficha.edit',$capitulo->ficha->id);
 
     }
+
+  
 }

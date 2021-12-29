@@ -58,7 +58,7 @@ class UserEditScreen extends Screen
         $this->user = $user;
 
         if (! $user->exists) {
-            $this->name = 'Create User';
+            $this->name = __('Create User');
         }
 
         $user->load(['roles']);
@@ -115,6 +115,7 @@ class UserEditScreen extends Screen
 
             Layout::block(UserPasswordLayout::class)
                 ->title(__('Password'))
+               
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(
                     Button::make(__('Save'))
@@ -123,7 +124,7 @@ class UserEditScreen extends Screen
                         ->canSee($this->user->exists)
                         ->method('save')
                 ),
-
+              
             Layout::block(UserRoleLayout::class)
                 ->title(__('Roles'))
                 ->description(__('A Role defines a set of tasks a user assigned the role is allowed to perform.'))

@@ -7,6 +7,7 @@ namespace App\Orchid\Screens\User;
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Platform\Models\User;
@@ -62,6 +63,7 @@ class UserProfileScreen extends Screen
      */
     public function layout(): array
     {
+       
         return [
             Layout::block(UserEditLayout::class)
                 ->title(__('Profile Information'))
@@ -75,6 +77,7 @@ class UserProfileScreen extends Screen
 
             Layout::block(ProfilePasswordLayout::class)
                 ->title(__('Update Password'))
+                ->canSee(Auth::user()->domain == null)
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(
                     Button::make(__('Update password'))

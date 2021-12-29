@@ -23,6 +23,7 @@ class Category extends Model
         'code',
         'num',
         'description',
+        'description_eu',
         'image'
     ];
 

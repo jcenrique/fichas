@@ -2,34 +2,29 @@
 
 namespace App\Orchid\Screens\Fichas;
 
-use App\Http\Requests\FichaRequest;
+
 use App\Models\Ficha;
 use App\Models\User;
 use App\Notifications\FichaCreada;
 use App\Orchid\Filters\CategoryFilter;
-use App\Orchid\Filters\FichaTrashedFilter;
-use App\Orchid\Layouts\Fichas\CapituloEditLayout;
+
 use App\Orchid\Layouts\Fichas\CategorySelection;
 use App\Orchid\Layouts\Fichas\FichaListLayout;
-use App\Orchid\Layouts\Fichas\LayautChangeStatus;
-use App\Orchid\Layouts\Fichas\LayoutChangeStatus;
+
 use App\Orchid\Layouts\Fichas\VersionEditLayout;
-use Illuminate\Database\Eloquent\Collection;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Notification;
 use Orchid\Crud\Filters\WithTrashed;
-use Orchid\Platform\Models\Role;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Fields\CheckBox;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Label;
+
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
-use phpDocumentor\Reflection\Types\Boolean;
+
 
 class FichaListScreen extends Screen
 {
@@ -38,16 +33,21 @@ class FichaListScreen extends Screen
      *
      * @var string
      */
-    public $name = 'Lista de fichas';
+    public $name ;
 
-    public $description = 'Fichas disponibles para visualizar';
+    public $description;
     private $withTrashed = false;
-    private $ficha;
+    public $ficha;
 
     public $permission = [
         'platform.fichas.fichas'
     ];
 
+    public  function __construct()
+    {
+        $this->name = __('Lista de fichas');
+        $this->description = __('Fichas disponibles para visualizar');
+    }
    
     /**
      * Query data.
@@ -61,11 +61,11 @@ class FichaListScreen extends Screen
         $this->exists = $ficha->exists;
        
         if ($this->exists) {
-            $this->name = 'Editar ficha';
+            $this->name = __('Editar ficha');
           
           
         }
-        $fichas = Ficha::with('category','roles')->filtersApply([CategoryFilter::class, WithTrashed::class])->filters()->defaultSort('category_id', 'asc')->paginate(10);
+        $fichas = Ficha::with('category','roles','capitulos')->filtersApply([CategoryFilter::class, WithTrashed::class])->defaultSort('category_id', 'asc')->paginate(10);
         $ficha->load('attachment');
 
         if (count($fichas) != 0) {
@@ -89,28 +89,27 @@ class FichaListScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Link::make('Crear nueva')
+            Link::make(__('Crear nueva'))
                 ->canSee(!$this->withTrashed)
-                ->myTooltip('Crear un nueva Ficha')
+                ->myTooltip(__('Crear un nueva Ficha'))
                 ->class('btn btn-default btn-rounded')
                 ->icon('fa.plus')
                 ->route('platform.ficha.edit'),
 
-            Button::make('Eliminar seleccionados')
+            Button::make(__('Eliminar seleccionados'))
                 ->canSee($this->withTrashed)
                 ->method('deleteSelectTrash')
-                ->confirm('
-                <strong class="text-red-500">¿Desea eleminar los elementos seleccionados definitivamente?</strong>')
-                ->myTooltip('Elimina definitivamente los elementos seleccionados')
+                ->confirm('<strong class="text-red-500">' . __('¿Desea eleminar los elementos seleccionados definitivamente?') . '</strong>')
+                ->myTooltip(__('Elimina definitivamente los elementos seleccionados'))
                 ->class('btn btn-default btn-rounded')
                 ->icon('fa.trash'),
 
-            Button::make('Restaurar seleccionados')
+            Button::make(__('Restaurar seleccionados'))
                 ->canSee($this->withTrashed)
                 ->method('restoreSelectTrash')
-                ->confirm('¿Desea restaurar los elementos seleccionados?')
+                ->confirm(__('¿Desea restaurar los elementos seleccionados?'))
                 ->parameters(['seleccion'])
-                ->myTooltip('Restaura los elementos seleccionados')
+                ->myTooltip(__('Restaura los elementos seleccionados'))
                 ->class('btn btn-default btn-rounded')
                 ->icon('fa.trash-restore'),
 
@@ -139,8 +138,10 @@ class FichaListScreen extends Screen
                 ->title(__('¿Desea cambiar el estado de la ficha?'))
                 ->size(Modal::SIZE_SM)
                 ->applyButton(__('Cambiar estado'))
+                ->closeButton(__('Cancelar'))
                 ->type('bg-blue-200')
-                ->withoutCloseButton()
+                ->staticBackdrop()
+               
                 ->async('asyncGetData')
                
                
@@ -159,10 +160,10 @@ class FichaListScreen extends Screen
                 $ficha->restore();
             }
 
-            Toast::info('Elementos recuperados con éxito');
+            Toast::info(__('Elementos recuperados con éxito'));
         } catch (\Exception $e) {
             report($e);
-            Toast::error('Se ha producido un error.');
+            Toast::error(__('Se ha producido un error.'));
         }
 
         return redirect()->route('platform.fichas.list');
@@ -177,10 +178,10 @@ class FichaListScreen extends Screen
                 $ficha->forceDelete();
             }
 
-            Toast::info('Elementos recuperados con éxito');
+            Toast::info(__('Elementos recuperados con éxito'));
         } catch (\Exception $e) {
             report($e);
-            Toast::error('Se ha producido un error.');
+            Toast::error(__('Se ha producido un error.'));
         }
 
         //  return redirect()->route('platform.fichas.list');
@@ -190,7 +191,7 @@ class FichaListScreen extends Screen
     public function publicar(  $id, Request  $request)
     {
         $ficha = Ficha::find($id);
-
+      
      
        if($request->get('aceptar')){
             
@@ -215,11 +216,11 @@ class FichaListScreen extends Screen
             })->get();
 
             
-        $ficha = Ficha::with('category')->find($id);
+            $ficha = Ficha::with('category')->find($id);
 
             $notificacion = new FichaCreada(__('Fichas'),__( 'Se creado o modificado una ficha'), $ficha);
 
-           
+       
 
             Notification::send($users, $notificacion);
         }
@@ -233,7 +234,7 @@ class FichaListScreen extends Screen
 public function asyncGetData( $id): array
 {
     $ficha = Ficha::find($id);
-  
+ 
     return [
         'id' => $id,
         'version' => $ficha->version,

@@ -16,7 +16,7 @@ class UserPresenter extends Presenter implements Searchable, Personable
      */
     public function label(): string
     {
-        return 'Users';
+        return __('Users');
     }
 
     /**

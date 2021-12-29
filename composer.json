@@ -12,6 +12,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "illuminate/contracts": "^8.61",
+        "kkomelin/laravel-translatable-string-exporter": "^1.14",
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
@@ -22,7 +23,6 @@
         "owen-it/laravel-auditing": "^12.0",
         "phpoffice/phpword": "^0.18.2",
         "spatie/eloquent-sortable": "^3.11",
-       
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5"
     },
     "require-dev": {

@@ -151,11 +151,11 @@
 
                             <p style="color:blue;margin: 0px;">
                                 <b><span>
-                                        CIRCULACION Y GESTION DEL SERVICIO
+                                        {{__('CIRCULACION Y GESTION DEL SERVICIO')}}
                                     </span></b>
                             </p>
                             <p style="margin: 0px;">
-                                <b><span>AVISO Nº: </span></b><b><span>{{$ficha->code}}</span></b>
+                                <b><span>{{__('AVISO Nº: ')}}</span></b><b><span>{{$ficha->code}}</span></b>
                             </p>
 
 
@@ -177,7 +177,7 @@
 
                             <p style="color:gray;margin: 0px;">
                                 <b><span>
-                                        VERSIÓN
+                                        {{__('VERSIÓN')}}
                                     </span></b>
                             </p>
 
@@ -209,7 +209,7 @@
 
                             <p style="color:gray;margin: 0px;">
                                 <b><span>
-                                        FECHA
+                                        {{__('FECHA')}}
                                     </span></b>
                             </p>
 
@@ -237,7 +237,7 @@
 
                             <p style="color:gray;margin: 0px;">
                                 <b><span>
-                                        TÍTULO
+                                        {{__('TÍTULO')}}
                                     </span></b>
                             </p>
 
@@ -264,7 +264,7 @@
 
                             <p style="color:gray;margin: 0px;">
                                 <b><span>
-                                        INSTALACIONES / DESCRIPCIÓN
+                                        {{__('INSTALACIONES / DESCRIPCIÓN')}}
                                     </span></b>
                             </p>
 

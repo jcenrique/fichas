@@ -37,6 +37,7 @@ class Ficha extends Model implements Auditable
 
 
     protected $fillable = [
+       
         'title',
         'category_id',
         'user_id',
@@ -115,6 +116,8 @@ class Ficha extends Model implements Auditable
     public function toSearchableArray()
     {
         $array = $this->toArray();
+        
+    //$array = $this->only('title', 'description');
 
         // Customize array...
 

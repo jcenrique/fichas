@@ -16,9 +16,18 @@
 
         </div>
 
+        @if ($categoria->description_eu)
+        <p class="text-sm text-justify text-gray-500 italic">
+            {{$categoria->description_eu}}
+        </p>
+        <hr> 
+        @endif
+        
         <p class="text-sm text-justify text-gray-500">
             {{$categoria->description}}
         </p>
+       
+        
 
     </div>
 

@@ -13,7 +13,7 @@ class FichaPresenter extends Presenter implements Cardable,Searchable
 
     public function label(): string
     {
-        return 'Fichas';
+        return __('Fichas');
     }
 
 
@@ -58,7 +58,7 @@ class FichaPresenter extends Presenter implements Cardable,Searchable
     public function searchQuery(string $query = null): Builder
     {
 
-        return $this->entity->search($query);
+        return $this->entity->search( 'title LIKE %' . $query . '%')->where('status', true);
     }
 
     /**
@@ -66,6 +66,6 @@ class FichaPresenter extends Presenter implements Cardable,Searchable
      */
     public function perSearchShow(): int
     {
-        return 3;
+        return 5;
     }
 }

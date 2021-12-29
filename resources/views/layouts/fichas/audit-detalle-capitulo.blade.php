@@ -37,16 +37,16 @@
                     <h2 class="font-bold text-blue-700">Titulo capitulo</h2>
                     <div class="m-4">
                         <div class="text-sm text-gray-500 text-left underline mb-2">
-                            Valor Anterior
+                            {{__('Valor Anterior')}}
 
                         </div>
                         <div class="text-gray-700  text-left pl-6  ">
                             {{$cambio_capitulo->getModified()['title']['old']}}
                         </div>
                         <div class="text-sm text-green-500 text-left underline mb-2">
-                            Valor creado el
+                            {{__('Valor creado el')}}
                             {{$cambio_capitulo->created_at->format('d-M-Y')}}
-                            por el usuario: {{$cambio_capitulo->user->name}}
+                            {{__('por el usuario:')}} {{$cambio_capitulo->user->name}}
                         </div>
                         <div class="text-green-700  text-left pl-6 ">
                             {{$cambio_capitulo->getModified()['title']['new']}}
@@ -74,16 +74,16 @@
                     <h2 class="font-bold text-blue-700">Contenido</h2>
                     <div class="m-4">
                         <div class="text-sm text-gray-500 text-left underline mb-2">
-                            Valor Anterior
+                            {{__('Valor Anterior')}}
 
                         </div>
                         <div class="text-gray-700  text-left pl-6 ">
                             {!!$cambio_capitulo->getModified()['body']['old']!!}
                         </div>
                         <div class="text-sm text-green-500 text-left underline mb-2">
-                            Valor creado el
+                            {{__('Valor creado el')}}
                             {{$cambio_capitulo->created_at->format('d-M-Y')}}
-                            por el usuario: {{$cambio_capitulo->user->name}}
+                            {{__('por el usuario:')}} {{$cambio_capitulo->user->name}}
                         </div>
                         <div class="text-green-700  text-left pl-6 ">
                             {!! $cambio_capitulo->getModified()['body']['new']!!}

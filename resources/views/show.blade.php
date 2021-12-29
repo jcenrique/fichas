@@ -2,36 +2,7 @@
 
 @section('content')
 
-<style>
-    ol {
-        list-style: decimal;
-        margin-left: 2em;
-    }
-
-    ul {
-        list-style: disc;
-        margin-left: 2em;
-    }
-
-    h2 {
-        display: block;
-        font-size: 1.5em;
-    }
-
-    h1 {
-        display: block;
-        font-size: 2em;
-    }
-
-    .ql-align-justify {
-        text-justify: auto;
-    }
-
-    p {
-        text-justify: auto;
-    }
-
-</style>
+<link href="{{ asset('css/ficha.css') }}" rel="stylesheet">
 
 <section class="bg-gray-700 py-6 mb-12">
     <div class="container grid grid-cols-1 lg:grid-cols-2 gap-3">
@@ -45,11 +16,11 @@
             <h2 class="text-2xl mb-4 text-gray-300">{{$ficha->description}}</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                        <p class="mb-2"><i class="fas fa-chart-line text-yellow-400 mr-2"></i> Categoría:
+                        <p class="mb-2"><i class="fas fa-chart-line text-yellow-400 mr-2"></i> {{__('Categoría:')}}
                             {{$ficha->category->name}}</p>
-                        <p class="mb-2"><i class="fas fa-layer-group text-yellow-400 mr-2"></i> Capítulos:
+                        <p class="mb-2"><i class="fas fa-layer-group text-yellow-400 mr-2"></i>{{__('Capítulos')}}:
                             {{$ficha->capitulos_count}}</p>
-                        <p class="mb-2"><i class="fas fa-code-branch text-yellow-400 mr-2"></i> Revisiones:
+                        <p class="mb-2"><i class="fas fa-code-branch text-yellow-400 mr-2"></i> {{__('Revisión:')}}
                             {{$ficha->version}}</p>
                     </div>
                     <div class="flex justify-end items-end">
@@ -58,12 +29,12 @@
                             {{__('Imprimir/Descargar')}}
                         </a>
                     </div>
-                    
+
                 </div>
 
 
     </div>
-    
+
 
 </section>
 
@@ -105,17 +76,18 @@
                     <i x-on:click="open=!open" x-show="open === false"
                         class="fa fa-chevron-circle-down cursor-pointer  text-blue-500 mr-2" data-toggle="tooltip"
                         data-placement="top" title="Desplegar!"></i>
-                    <h1 class="font-bold text-lg text-gray-600">{{$capitulo->title}}</h1>
+                    <h1 x-on:click="open=!open" class="font-bold text-lg select-none text-gray-600 hover:text-blue-700">
+                        {{$capitulo->title}}</h1>
 
 
                 </div>
             </header>
             <div class="border-t-1 bg-white py-4 px-4" x-show="open">
-                <ul class="grid grid-cols-1 gap-2">
+                {{-- <ul class="grid grid-cols-1 gap-2"> --}}
 
                     {!!$capitulo->body!!}
 
-                </ul>
+                    {{-- </ul> --}}
 
             </div>
 

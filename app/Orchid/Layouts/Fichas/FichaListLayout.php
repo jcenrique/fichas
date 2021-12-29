@@ -45,7 +45,8 @@ class FichaListLayout extends Table
 
 
             TD::make('category_id', __('Categoría'))
-               
+           // ->width('200px') 
+             
             ->sort()
                 ->render(function (Ficha $ficha) {
                     return $ficha->category->name;
@@ -67,7 +68,7 @@ class FichaListLayout extends Table
                         return  Str::of($ficha->title)->limit(30, ' ...');
                     } else {
                         return Link::make(Str::of($ficha->title)->limit(30, ' ...'))
-                            ->myTooltip('Editar Ficha')
+                            ->myTooltip(__('Editar Ficha'))
                             ->popover($ficha->title)
                             ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 py-1')
                             ->route('platform.ficha.edit', $ficha);
@@ -81,6 +82,7 @@ class FichaListLayout extends Table
                 ->render(function (Ficha $ficha) {
                     return  Str::of($ficha->description)->limit(100, ' ...');
                 })
+               
                 ->cantHide(false),
 
             TD::make('version', __('Versión')),
@@ -93,15 +95,15 @@ class FichaListLayout extends Table
                         return  view('components.bool', ['bool' => $ficha->status]);
                     } else {
 
-                        return ModalToggle::make($ficha->status?'Publicada':'Borrador')
+                        return ModalToggle::make($ficha->status?__('Publicada'):__('Borrador'))
                         ->modal('modalStatus')
-                        ->myTooltip($ficha->status?'Poner en borrador':'Publicar ficha')
+                        ->myTooltip($ficha->status?__('Poner en borrador'):__('Publicar ficha'))
                            
                             ->popover($ficha->title)
                             ->class($ficha->status?  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1':
                                                     'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 py-1')
                             ->method('publicar' )
-                           // ->parameters(['id' => $ficha->id, 'status' => $ficha->status])
+                            //->parameters(['id' => $ficha->id, 'status' => $ficha->status])
                             ->asyncParameters([$ficha->id]);
                             ;
                          

@@ -26,6 +26,7 @@ class CategoryListScreen extends Screen
 
 
     public $category_description ="";
+    public $category_description_eu ="";
 
 
     /**
@@ -41,6 +42,12 @@ class CategoryListScreen extends Screen
         'platform.fichas.categories'
     ];
 
+
+    public function __construct()
+    {
+        $this->name = __('Lista de categorías');
+         $this->description = __('Lista de categorías disponibles para la creación de fichas');
+    }
     /**
      * Query data.
      *
@@ -65,8 +72,8 @@ class CategoryListScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Link::make('Crear nueva')
-            ->myTooltip('Crear un nueva Categoría')
+            Link::make(__('Crear nueva'))
+            ->myTooltip(__('Crear un nueva Categoría'))
                 ->icon('pencil')
                 ->route('platform.category.edit')
         ];
@@ -86,7 +93,7 @@ class CategoryListScreen extends Screen
                 'oneAsyncModal',
 
 
-                    Layout::view('layouts.category-description', ['description' => $this->category_description ]),
+                    Layout::view('layouts.category-description', ['description' => $this->category_description , 'description_eu' => $this->category_description_eu]),
 
 
             )
@@ -99,6 +106,7 @@ class CategoryListScreen extends Screen
     public function asyncGetCategory(Category   $category): array
     {
         $this->category_description = $category->description;
+        $this->category_description_eu  = $category->description_eu;
 
         return [
             'category' => $category,

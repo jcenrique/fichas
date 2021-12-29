@@ -26,7 +26,7 @@ class FichaCreada extends Notification  //implements ShouldQueue
     public function __construct($title , $message , $ficha)
     {
         $this->title=$title;
-        $this->message=$message . " a";
+        $this->message=$message ;
         $this->ficha = $ficha;
         //$delay = now()->addMinutes(1);
 

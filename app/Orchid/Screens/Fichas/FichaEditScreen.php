@@ -14,6 +14,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 use App\Http\Requests\FichaRequest;
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\FichaCreada;
 use App\Orchid\Layouts\Fichas\CodigoListener;
@@ -23,6 +24,7 @@ use App\Orchid\Layouts\Fichas\FichaAuditoriaAcordion;
 use App\Orchid\Layouts\Fichas\VersionEditLayout;
 
 use Illuminate\Support\Facades\Notification;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
 
 use Orchid\Support\Color;
@@ -69,7 +71,7 @@ class FichaEditScreen extends Screen
         $this->ficha = $ficha;
 
         if ($this->exists) {
-            $this->name = 'Editar ficha';
+            $this->name = __('Editar ficha');
             $this->description = $ficha->title;
             $this->ficha->load('attachment');
             $this->status = $ficha->status;
@@ -99,7 +101,6 @@ class FichaEditScreen extends Screen
         return [
 
 
-
             ModalToggle::make(__('Cambiar versión'))
                 ->modal('modalVersion')
                 ->icon('sort-numeric-asc')
@@ -107,7 +108,7 @@ class FichaEditScreen extends Screen
                 ->myTooltip(__('Cambia la versión de la ficha actual'))
                 ->canSee($this->exists && !$this->status)
                 ->popover($this->ficha->title),
-                
+
 
             // ->method('cambiarVersion'),
 
@@ -124,18 +125,18 @@ class FichaEditScreen extends Screen
                 ->confirm(__('Antes de publicar debe guardar los cambios o se perderán, ¿desea continuar?'))
                 ->canSee($this->exists && !$this->status),
 
-            Button::make('Crear ficha')
-                ->icon('pencil')
+            Button::make(__('Crear ficha'))
+                ->icon('plus')
                 ->method('createOrUpdate')
                 ->canSee((!$this->exists)),
 
-            Button::make('Actualizar')
+            Button::make(__('Actualizar'))
                 ->icon('note')
                 ->method('createOrUpdate')
                 ->disabled($this->ficha->status ? true : false)
                 ->canSee($this->exists),
 
-            Button::make('Eliminar')
+            Button::make(__('Eliminar'))
                 ->icon('trash')
                 ->method('remove')
                 ->canSee($this->exists),
@@ -175,7 +176,7 @@ class FichaEditScreen extends Screen
                 ],
 
 
-                'Datos básicos'      => [
+                __('Datos básicos')      => [
 
                     $this->status == 0 ? FichasEditLayout::class : Layout::view('layouts.fichas.datos-basicos', ['ficha' => $this->ficha])
 
@@ -183,35 +184,25 @@ class FichaEditScreen extends Screen
 
 
 
-                'Capitulos' => Layout::view('components.view-capitulos'),
+                __('Capítulos') => Layout::view('components.view-capitulos', ['ficha' => $this->ficha]),
 
-                //'Capitulos1' => Layout::view('components.edit-capitulo',['capitulo' => $this->ficha->capitulos[0]]),
+               
 
-                'Auditoría' => [
+                __('Auditoría') => [
 
                     $this->exists  ?  FichaAuditoriaAcordion::class : Layout::view('layouts.fichas.audit-null')
                 ],
 
 
-            ])->activeTab('Codificación'),
+            ])->activeTab(__('Codificación')),
 
-            // Layout::modal('oneAsyncModal', CapituloEditLayout::class)
-            //     ->title('Nuevo Capítulo')
-            //     ->size(Modal::SIZE_LG)
-            //     ->async('asyncGetFicha'),
-
-                // Layout::modal('oneAsyncModal',[
-                //     Layout::view('components.edit-capitulo',['ficha' => $this->ficha])
-                // ])
-                // ->title('Nuevo Capítulo')
-                // ->size(Modal::SIZE_LG)
-                // ->async('asyncGetFicha'),
+            
 
             Layout::modal('modalVersion', VersionEditLayout::class)
-                ->title('Cambiar versión')
+                ->title(__('Cambiar versión'))
                 ->size(Modal::SIZE_SM)
                 ->async('cambiarVersion')
-               
+
 
 
         ];
@@ -228,7 +219,6 @@ class FichaEditScreen extends Screen
     {
 
 
-
         $fichaId = $ficha->id;
 
 
@@ -236,6 +226,13 @@ class FichaEditScreen extends Screen
         $old_category_id =  $request->get('old_category_id');
         $code_ficha = $request->get('codigo');
         $old_code_ficha = $request->get('old_codigo');
+
+
+
+        if ($code_ficha == null) {
+
+            return;
+        }
 
         $ficha = Ficha::updateOrCreate(
             ['id' => $fichaId],
@@ -255,13 +252,23 @@ class FichaEditScreen extends Screen
         if (is_null($fichaId)) {
             //incrementar contador categoria
             $ficha->category()->increment('num');
-            Toast::info('Registro creado con éxito');
+            Toast::info(__('Registro creado con éxito'));
         } else {
             if ($code_ficha != $old_code_ficha || $category_id != $old_category_id)   $ficha->category()->increment('num');
-            Toast::info('Registro actualizado con éxito');
+            Toast::info(__('Registro actualizado con éxito'));
         }
 
+         if (!$ficha->status) {
+ $role =  Role::where('name' ,'admin')->first();
+$users=$role->getUsers();
+            
 
+             $ficha = Ficha::with('category')->find($ficha->id);
+             $notificacion = new FichaCreada(__('Fichas'), __('Se creado o modificado una ficha, puede revisar la ficha antes de publicarla'), $ficha);
+
+
+             Notification::send($users, $notificacion);
+        }
 
         //  Ficha::enableAuditing();
         return redirect()->route('platform.ficha.edit', [$ficha->id]);
@@ -275,13 +282,6 @@ class FichaEditScreen extends Screen
 
     public function publicarFicha(Ficha $ficha, Request $request)
     {
-
-        //comprobar cambio de version
-
-
-
-
-
 
         $ficha->update([
             'status' =>  !$ficha->status,
@@ -323,14 +323,14 @@ class FichaEditScreen extends Screen
 
             Alert::view('layouts.partials.alert', Color::DANGER(), [
                 'error' => $ex,
-                'message' => 'Eliminar Ficha'
+                'message' => __('Eliminar Ficha')
             ]);
             //
             report($ex);
             return;
         }
 
-        Toast::warning('Has eliminado correctamente la ficha.');
+        Toast::warning(__('Has eliminado correctamente la ficha.'));
 
         return redirect()->route('platform.fichas.list');
     }
@@ -353,7 +353,9 @@ class FichaEditScreen extends Screen
             'category_id' => $category_id,
             'old_category_id' => $old_category_id,
             'codigo' => $category_name,
-            'old_codigo' => $old_codigo
+            'old_codigo' => $old_codigo,
+
+
 
 
         ];
@@ -379,22 +381,23 @@ class FichaEditScreen extends Screen
 
     public function cambiarVersion(Ficha $ficha, Request $request)
     {
+        if ($request['aceptar']) {
+            $version = $ficha->version + 1;
+            $ficha->update([
+                'version' =>  $version,
+            ]);
+        }
 
-        $version = $request->get('ficha')['version'];
-        $ficha->update([
-            'version' =>  $version,
-        ]);
 
-        
+
 
 
         return redirect()->route('platform.ficha.edit', [$ficha->id]);
-       
     }
 
     // public function asyncCambiarVersion(Ficha $ficha): array
     // {
-       
+
 
     //     return [
     //         'ficha' => $ficha,
@@ -407,46 +410,18 @@ class FichaEditScreen extends Screen
      * @param User    $user
      * @param Request $request
      */
-    public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
-    {
-
-         dd($request->all());
-        $ficha = Ficha::find($ficha_id);
-
-        if ($request->id != null) {
-            $capitulo = Capitulo::find($request->id)->update([
-                'title' => $request->title,
-                'body' => $request->body,
-            ]);
-          
-        } else {
-            $capitulo = $ficha->capitulos()->create(
-
-                array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
-            );
-        }
-
-        // $version = $capitulo->currentVersion();
-        //  dd($version);
-        // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
-
-  
-
-        Toast::info(__('Capitulo was saved.'));
-
-        return redirect()->route('platform.ficha.edit', [$ficha_id]);
-    }
-
     // public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
     // {
 
-    //     //dd($request->all());
+
     //     $ficha = Ficha::find($ficha_id);
-    //     if ($request->capitulo['id'] != null) {
-    //         $capitulo = Capitulo::find($request->capitulo['id'])->update([
-    //             'title' => $request->capitulo['title'],
-    //             'body' => $request->capitulo['body'],
+
+    //     if ($request->id != null) {
+    //         $capitulo = Capitulo::find($request->id)->update([
+    //             'title' => $request->title,
+    //             'body' => $request->body,
     //         ]);
+
     //     } else {
     //         $capitulo = $ficha->capitulos()->create(
 
@@ -464,6 +439,34 @@ class FichaEditScreen extends Screen
 
     //     return redirect()->route('platform.ficha.edit', [$ficha_id]);
     // }
+
+    public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
+    {
+
+
+        $ficha = Ficha::find($ficha_id);
+        if ($request->capitulo['id'] != null) {
+            $capitulo = Capitulo::find($request->capitulo['id'])->update([
+                'title' => $request->capitulo['title'],
+                'body' => $request->capitulo['body'],
+            ]);
+        } else {
+            $capitulo = $ficha->capitulos()->create(
+
+                array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
+            );
+        }
+
+        // $version = $capitulo->currentVersion();
+        //  dd($version);
+        // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
+
+
+
+        Toast::info(__('Capitulo was saved.'));
+
+        return redirect()->route('platform.ficha.edit', [$ficha_id]);
+    }
 
     public function removeCapitulo($ficha_id, $capitulo_id)
     {

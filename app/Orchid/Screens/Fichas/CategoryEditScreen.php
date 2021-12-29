@@ -36,13 +36,20 @@ class CategoryEditScreen extends Screen
         'platform.fichas.categories'
     ];
 
+
     /**
      * Si existe el modelo o es nuevo
      *
      * @var bool
      */
-    public $exists =false;
+    public $exists = false;
 
+
+    public function __construct()
+    {
+        $this->name = __('Crear una nueva categoría');
+        $this->description = __('Categorías disponibles para las fichas.');
+    }
     /**
      * Query data.
      *
@@ -51,15 +58,14 @@ class CategoryEditScreen extends Screen
     public function query(Category $category): array
     {
 
-    //    abort_if($this->authorize('update', $category),401,'Operación no autorizada');
-        $this->exists= $category->exists;
-        if ($this->exists){
-            $this->name= 'Editar categoría';
-
+        //    abort_if($this->authorize('update', $category),401,'Operación no autorizada');
+        $this->exists = $category->exists;
+        if ($this->exists) {
+            $this->name = __('Editar categoría');
         }
 
         return [
-            'category' =>$category
+            'category' => $category
 
         ];
     }
@@ -73,16 +79,16 @@ class CategoryEditScreen extends Screen
     {
         return [
 
-            Button::make('Crear categoría')
+            Button::make(__('Crear categoría'))
                 ->icon('pencil')
                 ->method('createOrUpdate')
                 ->canSee(!$this->exists),
-            Button::make('Actualizar')
+            Button::make(__('Actualizar'))
                 ->icon('note')
                 ->method('createOrUpdate')
                 ->canSee($this->exists),
 
-            Button::make('Eliminar')
+            Button::make(__('Eliminar'))
                 ->icon('trash')
                 ->method('remove')
                 ->canSee($this->exists),
@@ -102,30 +108,38 @@ class CategoryEditScreen extends Screen
 
 
                 Input::make('category.code')
-                    ->title('Código')
+                    ->title(__('Código'))
                     ->class('form-control uppercase')
-                    ->placeholder('Introducir el código')
+                    ->placeholder(__('Introducir el código'))
                     ->required()
-                    ->help('Prefijo que se incluirá para la identificación de la ficha'),
+                    ->help(__('Prefijo que se incluirá para la identificación de la ficha')),
 
                 Input::make('category.name')
-                    ->title('Nombre')
+                    ->title(__('Nombre'))
 
-                    ->placeholder('Introducir el nombre')
+                    ->placeholder(__('Introducir el nombre'))
                     ->required()
-                    ->help('Nombre que ayuda a la clasificación de las fichas'),
+                    ->help(__('Nombre que ayuda a la clasificación de las fichas')),
 
-
+                   
 
                 TextArea::make('category.description')
-                    ->title('Descripción')
+                    ->title(__('Descripción Castellano'))
                     ->rows(3)
                     ->required()
-                    ->placeholder('Introducir una breve descripción de la categoría'),
+                    
+                    ->placeholder(_('Introducir una breve descripción de la categoría en Castellano')),
+                    
+                TextArea::make('category.description_eu')
+                    ->title(__('Descripción Euskera'))
+                    ->rows(3)
+                    
+                    
+                    ->placeholder(_('Introducir una breve descripción de la categoría en Euskera')),
 
                 Cropper::make('category.image')
                     ->maxWidth(200)
-                    ->title('Imagen descriptiva')
+                    ->title(__('Imagen descriptiva'))
                     ->width(500)
                     ->height(200)
 
@@ -146,14 +160,13 @@ class CategoryEditScreen extends Screen
     public function createOrUpdate(Category $category, CategoryRequest $request)
     {
 
-
+       
 
         $category->fill($request->get('category'))->save();
 
-        Toast::info('Registro guardado con éxito');
+        Toast::info(__('Registro guardado con éxito'));
 
         return redirect()->route('platform.categories.list');
-
     }
 
     /**
@@ -171,14 +184,14 @@ class CategoryEditScreen extends Screen
 
             Alert::view('layouts.partials.alert', Color::DANGER(), [
                 'error' => $ex,
-                'message' => 'Eliminar categoría'
+                'message' => __('Eliminar categoría')
             ]);
 
             report($ex);
-            return ;
+            return;
         }
 
-        Toast::info('Registro eliminado con éxito');
+        Toast::info(__('Registro eliminado con éxito'));
 
         return redirect()->route('platform.categories.list');
     }

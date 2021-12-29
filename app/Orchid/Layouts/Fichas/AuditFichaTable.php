@@ -26,7 +26,7 @@ class AuditFichaTable extends Table
     {
 
         return [
-            TD::make('code', 'Código')
+            TD::make('code', __('Código'))
 
 
                 ->render(function ($audit) {
@@ -41,7 +41,7 @@ class AuditFichaTable extends Table
 
                 }),
 
-            TD::make('title', 'Título')
+            TD::make('title', __('Título'))
 
 
                 ->render(function ($audit) {
@@ -54,7 +54,7 @@ class AuditFichaTable extends Table
                     //return view('layouts.fichas.audit-values',['old_value' => $audit->old_values['title'] , 'new_value' => $audit->new_values['title']]);
 
                 }),
-            TD::make('description', 'Descripción')
+            TD::make('description', __('Descripción'))
 
 
                 ->render(function ($audit) {

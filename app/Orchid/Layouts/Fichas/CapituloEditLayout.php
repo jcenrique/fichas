@@ -35,13 +35,13 @@ class CapituloEditLayout extends Rows
              ,
 
              Input::make('capitulo.title')
-             ->title('Título')
+             ->title(__('Título'))
              ->class('form-control uppercase')
                 ->required()
              ,
              Quill::make('capitulo.body')
              ->required()
-                 ->title('Contenido'),
+                 ->title(__('Contenido')),
             
           
         ];

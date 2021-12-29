@@ -15,13 +15,13 @@
         <div class="flex flex-wrap justify-between items-baseline ">
             <div>
                 <div class="text-sm text-red-800">  {{$category==null?$ficha->category->name :''}}</div>
-                <h1 class="card-title text-xl font-bold text-gray-400">{{$ficha->title}} </h1>
+                <h1 class="card-title text-xl font-bold text-gray-400 break-all">{{$ficha->title}} </h1>
                 <div class="font-mono text-xl font-bold text-red-800">{{  $ficha->code  }}</div>
 
 
                 <div class="text-sm text-justify text-gray-500 mt-4">
-                    <div class="underline mb-2">Descripción:</div>
-                    <div class="mb-4 text-base"> {{$ficha->description}}</div>
+                    <div class="underline mb-2">{{__('Descripción:')}}</div>
+                    <div class="mb-4 ml-1 text-base break-all"> {{$ficha->description}}</div>
                 </div>
             </div>
 
@@ -32,9 +32,9 @@
 
         <div class="w-full flex flex-col  border-t-2">
 
-            <div class="flex  justify-between text-gray-500 mb-2">
-                <div class="">Capitulos: <small>  ({{$ficha->capitulos_count}})</small></div>
-                <div class="">Versiones: <small>  ({{$ficha->version}})</small></div>
+            <div class="flex gap-3 justify-between text-gray-500 mb-2">
+                <div class="">{{__('Capitulos:')}} <small>  ({{$ficha->capitulos_count}})</small></div>
+                <div class="">{{__('Versión:')}} <small>  ({{$ficha->version}})</small></div>
 
             </div>
 

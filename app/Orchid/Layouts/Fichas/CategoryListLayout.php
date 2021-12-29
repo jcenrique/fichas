@@ -33,7 +33,7 @@ class CategoryListLayout extends Table
     
         return [
 
-            TD::make('name', 'Nombre')
+            TD::make('name',__( 'Nombre'))
                 ->cantHide(false)
                
                 ->sort()
@@ -41,17 +41,17 @@ class CategoryListLayout extends Table
                 ->render(function (Category $category)
                 {
                     return Link::make($category->name)
-                                ->myTooltip('Editar Categoría')
+                                ->myTooltip(__('Editar Categoría'))
                                 ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 py-1')
                                 ->route('platform.category.edit' ,$category);
                 }),
 
-            TD::make('code', 'Código'),
+            TD::make('code', __('Código')),
 
             
-            TD::make('category.version', 'Versión'),
+            TD::make('category.version', __('Versión')),
 
-            TD::make('description', 'Descripción')
+            TD::make('description', __('Descripción ES'))
                 ->cantHide(false)
                
                 // ->render(function (Category $category)
@@ -62,10 +62,10 @@ class CategoryListLayout extends Table
                 ->render(function (Category $category)
                 {
                     return ModalToggle::make(Str::of($category->description)->limit(100, ' ...'))
-                    ->myTooltip('Ver descripción completa')
+                    ->myTooltip(__('Ver descripción completa'))
                     ->modal('oneAsyncModal')
                     ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1')
-                    ->modalTitle('Descripción')
+                    ->modalTitle(__('Descripción'))
                     ->asyncParameters([
                         'category' => $category->id,
                     ]);
@@ -73,10 +73,13 @@ class CategoryListLayout extends Table
 
                 })
 
-                ,
-            TD::make('num', 'Indice'),
+                
 
-            TD::make('Num. Fichas')
+                
+                ,
+            TD::make('num', __('Indice')),
+
+            TD::make(__('Num. Fichas'))
                 ->cantHide(false)
                 
                 ->render(
@@ -86,7 +89,7 @@ class CategoryListLayout extends Table
                     }
                 ),
 
-            TD::make('image', 'Imagen')
+            TD::make('image', __('Imagen'))
                 ->cantHide(false)
                
                 ->render(function (Category $category)

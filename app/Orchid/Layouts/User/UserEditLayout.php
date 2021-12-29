@@ -6,6 +6,7 @@ namespace App\Orchid\Layouts\User;
 
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Rows;
 
 class UserEditLayout extends Rows
@@ -32,6 +33,17 @@ class UserEditLayout extends Rows
                 ->required()
                 ->title(__('Email'))
                 ->placeholder(__('Introduzca un nombre de Email')),
+            
+            Select::make('user.locale')
+                ->required()
+                ->options([
+                    'es' => __('Castellano'),
+                    'eu' => __('Euskera'),
+                   
+                ])
+                ->title(__('Lenguaje'))
+                ->help(__('Seleccione el lenguaje de la aplicación')),
+                
         ];
     }
 }

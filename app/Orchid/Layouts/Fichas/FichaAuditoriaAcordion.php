@@ -14,11 +14,11 @@ class FichaAuditoriaAcordion extends Accordion
        
 
         $this->layouts = [
-            'Cambios en ficha' => [
+            __('Cambios en ficha') => [
                 AuditFichaTable::class,
             ],
 
-            'Cambios en capitulos' => [
+            __('Cambios en capitulos') => [
                 AuditCapituloTable::class,
             ],
 

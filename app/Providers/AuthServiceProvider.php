@@ -12,6 +12,7 @@ use Laravel\Fortify\Fortify;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\App;
 
 class AuthServiceProvider extends ServiceProvider
 {

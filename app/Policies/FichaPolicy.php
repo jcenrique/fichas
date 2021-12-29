@@ -55,6 +55,7 @@ class FichaPolicy
      */
     public function create(User $user)
     {
+        
         return true;
     }
 

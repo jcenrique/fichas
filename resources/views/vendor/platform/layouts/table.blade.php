@@ -1,4 +1,11 @@
 <style>
+   table {
+   width: 100%;
+ 
+   word-wrap: keep-all;
+}
+
+
     .nodisplay{
         display: none;
     }
@@ -21,11 +28,12 @@
 
 
     <div class="table-responsive">
-        <table class="table
-            @if($striped) table-striped @endif
-            @if($bordered) table-bordered @endif
-            @if($hoverable) table-hover @endif
-        ">
+        <table @class([
+            'table',
+            'table-striped'  => $striped,
+            'table-bordered' => $bordered,
+            'table-hover'    => $hoverable,
+       ])>
             <thead>
                 <tr>
                     @foreach($columns as $column)

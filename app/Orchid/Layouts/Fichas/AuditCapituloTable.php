@@ -28,7 +28,7 @@ class AuditCapituloTable extends Table
 
         return [
 
-            TD::make('title', 'Capitulos')
+            TD::make('title', __('Capitulos'))
                 ->width('650px')
                 ->render(function ($capitulo) {
 

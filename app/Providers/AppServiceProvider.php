@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Models\Ficha;
 use App\Observers\FichaObserver;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 use Orchid\Icons\IconFinder;
 use Orchid\Platform\Dashboard;
@@ -25,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
             $this->render = function ($datum) use ($column) {
 
-                return view('components.bool',[
+                return view('components.bool', [
                     'bool' => $datum->$column
                 ]);
             };
@@ -45,14 +48,16 @@ class AppServiceProvider extends ServiceProvider
         $dashboard->registerSearch([
             Ficha::class,
             //...Models
-          ]);
+        ]);
 
-          Audit::creating(function (Audit $model) {
+        Audit::creating(function (Audit $model) {
             if (empty($model->old_values) && empty($model->new_values)) {
                 return false;
             }
         });
 
         $iconFinder->registerIconDirectory('fa', resource_path('icons/fontawesome'));
+
+        
     }
 }
