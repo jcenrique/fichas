@@ -45,21 +45,22 @@ class FichaListLayout extends Table
 
 
             TD::make('category_id', __('Categoría'))
-           // ->width('200px') 
-             
-            ->sort()
+                // ->width('200px') 
+                ->sort()
+
                 ->render(function (Ficha $ficha) {
                     return $ficha->category->name;
                 }),
 
-            TD::make('code', __('Código')),
-               
+            TD::make('code', __('Código'))
+                ->sort(),
+
 
             TD::make('title', __('Titulo'))
 
                 ->cantHide(false)
-               
-                
+
+
                 ->sort()
                 ->filter(TD::FILTER_TEXT)
                 ->cantHide(false)
@@ -78,42 +79,40 @@ class FichaListLayout extends Table
 
 
             TD::make('description', __('Descripción'))
-               
+
                 ->render(function (Ficha $ficha) {
                     return  Str::of($ficha->description)->limit(100, ' ...');
                 })
-               
+
                 ->cantHide(false),
 
             TD::make('version', __('Versión')),
-            
-            TD::make('status', __('Publicado'))
 
-               
+            TD::make('status', __('Publicado'))
+                ->sort()
+
                 ->render(function (Ficha $ficha) {
                     if ($this->query['withTrashed']) {
                         return  view('components.bool', ['bool' => $ficha->status]);
                     } else {
 
-                        return ModalToggle::make($ficha->status?__('Publicada'):__('Borrador'))
-                        ->modal('modalStatus')
-                        ->myTooltip($ficha->status?__('Poner en borrador'):__('Publicar ficha'))
-                           
+                        return ModalToggle::make($ficha->status ? __('Publicada') : __('Borrador'))
+                            ->modal('modalStatus')
+                            ->myTooltip($ficha->status ? __('Poner en borrador') : __('Publicar ficha'))
+
                             ->popover($ficha->title)
-                            ->class($ficha->status?  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1':
-                                                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 py-1')
-                            ->method('publicar' )
+                            ->class($ficha->status ?  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1' :
+                                'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 py-1')
+                            ->method('publicar')
                             //->parameters(['id' => $ficha->id, 'status' => $ficha->status])
-                            ->asyncParameters([$ficha->id]);
-                            ;
-                         
+                            ->asyncParameters([$ficha->id]);;
                     }
                 })
                 ->cantHide(false),
 
 
             TD::make('created_at', __('Creada'))
-               
+
                 ->render(function (Ficha $ficha) {
                     return $ficha->created_at->format('d-m-Y');
                 }),
@@ -144,7 +143,4 @@ class FichaListLayout extends Table
     {
         return true;
     }
-
-
-
 }

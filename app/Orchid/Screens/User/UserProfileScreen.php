@@ -76,7 +76,7 @@ class UserProfileScreen extends Screen
                 ),
 
             Layout::block(ProfilePasswordLayout::class)
-                ->title(__('Update Password'))
+                ->title(__('Update password'))
                 ->canSee(Auth::user()->domain == null)
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(

@@ -65,7 +65,7 @@ class FichaListScreen extends Screen
           
           
         }
-        $fichas = Ficha::with('category','roles','capitulos')->filtersApply([CategoryFilter::class, WithTrashed::class])->defaultSort('category_id', 'asc')->paginate(10);
+        $fichas = Ficha::with('category','roles','capitulos')->filters()->filtersApply([CategoryFilter::class, WithTrashed::class])->defaultSort('category_id', 'desc')->paginate(10);
         $ficha->load('attachment');
 
         if (count($fichas) != 0) {

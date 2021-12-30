@@ -21,7 +21,7 @@ class CategoryFilter extends Filter
      */
     public function name(): string
     {
-        return 'Categorias';
+        return __('Categorías');
     }
 
     /**
@@ -53,7 +53,7 @@ class CategoryFilter extends Filter
         ->multiple()
 
         ->value($this->request->get('category_id'))
-        ->title(__('Categorias')),
+        ->title(__('Categorías')),
         ];
     }
 

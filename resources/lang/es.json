@@ -45,7 +45,7 @@
     "Capitulos:": "Capitulos:",
     "Capítulos": "Capítulos",
     "Castellano": "Castellano",
-    "Categorias": "Categorías",
+    "Categorías": "Categorías",
     "CATEGORIAS": "CATEGORIAS",
     "Categoría": "Categoría",
     "Categoría:": "Categoría:",
@@ -80,7 +80,6 @@
     "Datos básicos": "Datos básicos",
     "Delete": "Eliminar",
     "Descripción": "Descripción",
-    "Descripción:": "Descripción:",
     "Description": "Descripción",
     "Descriptión": "Descriptión",
     "Display name": "Nombre para mostrar",
@@ -195,6 +194,7 @@
     "Product, promo code, or slogan (e.g. spring_sale)": "Producto, código promocional o eslogan (ej. oferta_de_primavera)",
     "Profile Information": "Información de perfil",
     "Profile updated.": "Perfil actualizado.",
+    "Profile": "Perfil",
     "Publica la ficha actual y queda disponible a todos a los usuarios": "Publica la ficha actual y queda disponible a todos a los usuarios",
     "Publicada": "Publicada",
     "Publicado": "Publicado",
@@ -251,7 +251,6 @@
     "Two-Factor Authentication": "Autenticación de dos factores",
     "TÍTULO": "TÍTULO",
     "Título": "Título",
-    "Update Password": "Actualizar contraseña",
     "Update password": "Actualizar contraseña",
     "Update your account's profile information and email address.": "Actualice la información de su cuenta y la dirección de correo electrónico",
     "Update your account\\'s profile information and email address.": "Actualice la información de perfil y la dirección de correo electrónico de su cuenta.",
@@ -280,5 +279,7 @@
     "You requested a page that doesn't exist.": "Buscaste una página que no existe.",
     "¿Desea cambiar el estado de la ficha?": "¿Desea cambiar el estado de la ficha?",
     "¿Desea eleminar los elementos seleccionados definitivamente?": "¿Desea eleminar los elementos seleccionados definitivamente?",
-    "¿Desea restaurar los elementos seleccionados?": "¿Desea restaurar los elementos seleccionados?"
+    "¿Desea restaurar los elementos seleccionados?": "¿Desea restaurar los elementos seleccionados?",
+    "Deleted entries":"Elementos eliminados",
+    "Show deleted entries" :"Mostrar elementos eliminados"
 }

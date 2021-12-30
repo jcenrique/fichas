@@ -61,10 +61,20 @@ class CategoryListLayout extends Table
 
                 ->render(function (Category $category)
                 {
-                    return ModalToggle::make(Str::of($category->description)->limit(100, ' ...'))
+                    $categoria_title_eu = Str::of($category->description_eu)->limit(100, ' ...');
+                      
+                    $categoria_title_es = Str::of($category->description)->limit(100, ' ...');
+                    
+                    if ($category->description_eu) {
+                        $categoria_title = $categoria_title_eu . '<br>' . $categoria_title_es;
+                    }else{
+                        $categoria_title = $categoria_title_es;
+                    }
+                    return ModalToggle::make($categoria_title )
                     ->myTooltip(__('Ver descripción completa'))
+                    ->icon('fa.book')
                     ->modal('oneAsyncModal')
-                    ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1')
+                    ->class('px-2 py-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1')
                     ->modalTitle(__('Descripción'))
                     ->asyncParameters([
                         'category' => $category->id,

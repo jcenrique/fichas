@@ -14,9 +14,11 @@
     >
 
         @isset($icon)
-            <x-orchid-icon :path="$icon" class="{{ empty($name) ?: 'me-2'}}"/>
+            <x-orchid-icon :path="$icon" class="{{ empty($name) ?: 'm-2'}}"/>
         @endisset
-
-        {{ $name ?? '' }}
+    <span class="text-left align-middle ">
+        {!! $name ?? '' !!}
+    </span>
+       
     </button>
 @endcomponent

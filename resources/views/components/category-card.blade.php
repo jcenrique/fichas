@@ -2,7 +2,7 @@
 
 <article class="card flex flex-col shadow-sm ">
 
-    <img class="h-36  w-full object-cover rounded-t" src="{{$categoria->image}}" alt="">
+    <img class="h-32  w-full object-cover rounded-t" src="{{$categoria->image}}" alt="">
 
     <div class="card-body grid grid-cols-1 gap-2 place-content-start">
 
@@ -11,7 +11,7 @@
             <h1 class="card-title text-xl font-bold text-gray-400">{{$categoria->name}}</h1>
 
             <p class="text-sm text-red-800">
-                Fichas: <small> ({{$categoria->fichas_count}})</small>
+                {{__('Fichas')}}: <small> ({{$categoria->fichas_count}})</small>
             </p>
 
         </div>

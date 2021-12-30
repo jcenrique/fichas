@@ -20,7 +20,7 @@
 
 
                 <div class="text-sm text-justify text-gray-500 mt-4">
-                    <div class="underline mb-2">{{__('Descripción:')}}</div>
+                    <div class="underline mb-2">{{__('Descripción')}}:</div>
                     <div class="mb-4 ml-1 text-base break-all"> {{$ficha->description}}</div>
                 </div>
             </div>
@@ -33,8 +33,8 @@
         <div class="w-full flex flex-col  border-t-2">
 
             <div class="flex gap-3 justify-between text-gray-500 mb-2">
-                <div class="">{{__('Capitulos:')}} <small>  ({{$ficha->capitulos_count}})</small></div>
-                <div class="">{{__('Versión:')}} <small>  ({{$ficha->version}})</small></div>
+                <div class="">{{__('Capitulos')}}: <small>  ({{$ficha->capitulos_count}})</small></div>
+                <div class="">{{__('Versión')}}: <small>  ({{$ficha->version}})</small></div>
 
             </div>
 

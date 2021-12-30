@@ -138,7 +138,7 @@ class CategoryEditScreen extends Screen
                     ->placeholder(_('Introducir una breve descripción de la categoría en Euskera')),
 
                 Cropper::make('category.image')
-                    ->maxWidth(200)
+                    //->maxWidth(200)
                     ->title(__('Imagen descriptiva'))
                     ->width(500)
                     ->height(200)
