@@ -264,7 +264,7 @@ class FichaEditScreen extends Screen
 
 
             $ficha = Ficha::with('category')->find($ficha->id);
-            $notificacion = new FichaCreada(__('Fichas'), __('Se creado o modificado una ficha, puede revisar la ficha antes de publicarla'), $ficha);
+            $notificacion = new FichaCreada(__('Fichas'), __('Se ha creado o modificado una ficha, puede revisar la ficha antes de publicarla'), $ficha);
 
 
             Notification::send($users, $notificacion);
@@ -301,7 +301,7 @@ class FichaEditScreen extends Screen
             })->get();
 
             $ficha = Ficha::with('category')->find($ficha->id);
-            $notificacion = new FichaCreada(__('Fichas'), __('Se creado o modificado una ficha'), $ficha);
+            $notificacion = new FichaCreada(__('Fichas'), __('Se ha creado o modificado una ficha'), $ficha);
 
 
             Notification::send($users, $notificacion);
