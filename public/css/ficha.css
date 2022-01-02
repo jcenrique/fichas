@@ -76,3 +76,5 @@
     p {
         text-justify: auto;
     }
+
+    img {max-width:100%; height:auto}
