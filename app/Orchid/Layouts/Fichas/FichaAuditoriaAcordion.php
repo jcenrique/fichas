@@ -7,12 +7,8 @@ use Orchid\Screen\Layouts\Accordion;
 
 class FichaAuditoriaAcordion extends Accordion
 {
-  
-
     public function __construct()
     {
-       
-
         $this->layouts = [
             __('Cambios en ficha') => [
                 AuditFichaTable::class,
@@ -26,5 +22,4 @@ class FichaAuditoriaAcordion extends Accordion
 
         ];
     }
-
 }

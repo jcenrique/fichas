@@ -33,12 +33,12 @@ class CategoryFilter extends Filter
     {
         //dd($builder->whereIn('category_id' , $this->request->get('category_id'))->get());
 
-       // $this->category_name = Category:: ($this->request->get('category_id'))->first()->name;
-    //    return $builder->whereHas('category', function (Builder $query) {
-    //     $query->whereIn('category_id', $this->request->get('category_id'));
-  // });
-//dd($this->request->all());
-       return $builder->whereIn('category_id' , $this->request->get('category_id'));
+        // $this->category_name = Category:: ($this->request->get('category_id'))->first()->name;
+        //    return $builder->whereHas('category', function (Builder $query) {
+        //     $query->whereIn('category_id', $this->request->get('category_id'));
+        // });
+        //dd($this->request->all());
+        return $builder->whereIn('category_id', $this->request->get('category_id'));
     }
 
     /**
@@ -46,7 +46,6 @@ class CategoryFilter extends Filter
      */
     public function display(): array
     {
-
         return [
         Select::make('category_id')
         ->fromModel(Category::class, 'name')

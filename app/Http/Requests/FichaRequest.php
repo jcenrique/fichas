@@ -6,8 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class FichaRequest extends FormRequest
 {
-
-
     public function __construct()
     {
     }
@@ -43,7 +41,6 @@ class FichaRequest extends FormRequest
 
     public function messages()
     {
-
         return [
             'ficha.title.required' => "El  campo :attribute no puede estar vacío",
             'ficha.description.required' => "El  campo :attribute no puede estar vacío",

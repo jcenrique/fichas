@@ -20,12 +20,12 @@ class LocaleMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()){
+        if (Auth::user()) {
             App::setLocale(Auth::user()->locale);
-        }else{
+        } else {
             App::setLocale('es');
         }
-        
+
         return $next($request);
     }
 }

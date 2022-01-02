@@ -28,16 +28,14 @@ class FichaCapituloEditScreen extends Screen
      * @return array
      */
 
-     public function __construct()
-     {
+    public function __construct()
+    {
         $this->name = __('Nuevo cápitulo');
-
-     }
+    }
     public function query(Ficha $ficha): array
     {
-       
-       $this->capitulo = new Capitulo();
-       $this->ficha = $ficha;
+        $this->capitulo = new Capitulo();
+        $this->ficha = $ficha;
         return [
             'capitulo' => $this->capitulo,
             'ficha' => $this->ficha
@@ -51,13 +49,13 @@ class FichaCapituloEditScreen extends Screen
      */
     public function commandBar(): array
     {
-         return [
+        return [
             Button::make(__('Nuevo capitulo'))
                 ->icon('note')
                 ->method('createOrUpdate')
-              
-            
-            
+
+
+
         ];
     }
 
@@ -74,11 +72,8 @@ class FichaCapituloEditScreen extends Screen
         ];
     }
 
-    public function createOrUpdate(Ficha $ficha, Capitulo $capitulo,   CapituloRequest $request)
+    public function createOrUpdate(Ficha $ficha, Capitulo $capitulo, CapituloRequest $request)
     {
-
-       
-
         $ficha->capitulos()->create([
             'title' => $request->get('title'),
             'body' => $request->get('body'),
@@ -87,7 +82,6 @@ class FichaCapituloEditScreen extends Screen
 
         Toast::info(__('Registro guardado con éxito'));
 
-        return redirect()->route('platform.ficha.edit',$ficha->id);
-
+        return redirect()->route('platform.ficha.edit', $ficha->id);
     }
 }

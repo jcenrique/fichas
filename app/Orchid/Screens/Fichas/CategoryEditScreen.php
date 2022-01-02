@@ -121,20 +121,18 @@ class CategoryEditScreen extends Screen
                     ->required()
                     ->help(__('Nombre que ayuda a la clasificación de las fichas')),
 
-                   
-
                 TextArea::make('category.description')
                     ->title(__('Descripción Castellano'))
                     ->rows(3)
                     ->required()
-                    
+
                     ->placeholder(_('Introducir una breve descripción de la categoría en Castellano')),
-                    
+
                 TextArea::make('category.description_eu')
                     ->title(__('Descripción Euskera'))
                     ->rows(3)
-                    
-                    
+
+
                     ->placeholder(_('Introducir una breve descripción de la categoría en Euskera')),
 
                 Cropper::make('category.image')
@@ -159,9 +157,6 @@ class CategoryEditScreen extends Screen
      */
     public function createOrUpdate(Category $category, CategoryRequest $request)
     {
-
-       
-
         $category->fill($request->get('category'))->save();
 
         Toast::info(__('Registro guardado con éxito'));
@@ -180,8 +175,6 @@ class CategoryEditScreen extends Screen
         try {
             $category->delete();
         } catch (\Illuminate\Database\QueryException $ex) {
-
-
             Alert::view('layouts.partials.alert', Color::DANGER(), [
                 'error' => $ex,
                 'message' => __('Eliminar categoría')

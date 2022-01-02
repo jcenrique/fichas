@@ -44,9 +44,20 @@ class FichaPolicy
      */
     public function view(User $user, Ficha $ficha)
     {
-        return $ficha->status;
+        return $ficha->status || $user->getRoles()->contains('slug', 'admin');
     }
 
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Ficha  $ficha
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function viewPDF(User $user, Ficha $ficha)
+    {
+        return $ficha->status || $user->getRoles()->contains('slug', 'admin');
+    }
     /**
      * Determine whether the user can create models.
      *
@@ -55,7 +66,6 @@ class FichaPolicy
      */
     public function create(User $user)
     {
-        
         return true;
     }
 

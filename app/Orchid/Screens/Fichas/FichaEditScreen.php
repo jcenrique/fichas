@@ -29,6 +29,7 @@ use Orchid\Screen\Actions\ModalToggle;
 
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Alert;
+use OwenIt\Auditing\Models\Audit;
 
 class FichaEditScreen extends Screen
 {
@@ -64,7 +65,6 @@ class FichaEditScreen extends Screen
      */
     public function query(Ficha $ficha): array
     {
-
         $this->exists = $ficha->exists;
 
 
@@ -96,34 +96,36 @@ class FichaEditScreen extends Screen
      */
     public function commandBar(): array
     {
-
-
         return [
+            Button::make(__('Vista pantalla'))
+            ->icon('magnifier')
+            ->myTooltip(__('Muestra una vista prevía con el formato en pantalla'))
+            ->method('vistaPreviaFichaPantalla')
 
+            ->canSee($this->exists && !$this->status),
 
-            ModalToggle::make(__('Cambiar versión'))
-                ->modal('modalVersion')
-                ->icon('sort-numeric-asc')
-                ->method('cambiarVersion')
-                ->myTooltip(__('Cambia la versión de la ficha actual'))
-                ->canSee($this->exists && !$this->status)
-                ->popover($this->ficha->title),
+            Button::make(__('Vista impresión'))
+                ->icon('magnifier')
+                ->myTooltip(__('Muestra una vista prevía de impresión'))
+                ->method('vistaPreviaFicha')
 
+                ->canSee($this->exists && !$this->status),
 
-            // ->method('cambiarVersion'),
-
+         
             Button::make(__('Poner en borrador'))
                 ->icon('pencil')
                 ->myTooltip(__('Poner en modo borrador la ficha actual'))
                 ->method('publicarFicha')
                 ->canSee($this->exists && $this->status),
 
-            Button::make(__('Publicar'))
+            ModalToggle::make(__('Publicar'))
+                ->modal('modalVersion')
                 ->icon('pencil')
                 ->myTooltip(__('Publica la ficha actual y queda disponible a todos a los usuarios'))
                 ->method('publicarFicha')
                 ->confirm(__('Antes de publicar debe guardar los cambios o se perderán, ¿desea continuar?'))
-                ->canSee($this->exists && !$this->status),
+                ->canSee($this->exists && !$this->status)
+                ->asyncParameters([$this->ficha->id]),
 
             Button::make(__('Crear ficha'))
                 ->icon('plus')
@@ -152,8 +154,6 @@ class FichaEditScreen extends Screen
      */
     public function layout(): array
     {
-
-
         return [
             Layout::columns([
                 Layout::view('components.cabecera-ficha', ['ficha' => $this->ficha])
@@ -186,22 +186,23 @@ class FichaEditScreen extends Screen
 
                 __('Capítulos') => Layout::view('components.view-capitulos', ['ficha' => $this->ficha]),
 
-               
 
-                __('Auditoría') => [
 
-                    $this->exists  ?  FichaAuditoriaAcordion::class : Layout::view('layouts.fichas.audit-null')
+                __('Registro de cambios') => [
+
+                    $this->exists ? FichaAuditoriaAcordion::class : Layout::view('layouts.fichas.audit-null')
                 ],
 
 
             ])->activeTab(__('Codificación')),
 
-            
+
 
             Layout::modal('modalVersion', VersionEditLayout::class)
                 ->title(__('Cambiar versión'))
                 ->size(Modal::SIZE_SM)
-                ->async('cambiarVersion')
+                ->async('asyncGetDataEdit')
+
 
 
 
@@ -217,8 +218,6 @@ class FichaEditScreen extends Screen
      */
     public function createOrUpdate(Ficha $ficha, FichaRequest $request)
     {
-
-
         $fichaId = $ficha->id;
 
 
@@ -230,7 +229,6 @@ class FichaEditScreen extends Screen
 
 
         if ($code_ficha == null) {
-
             return;
         }
 
@@ -254,20 +252,22 @@ class FichaEditScreen extends Screen
             $ficha->category()->increment('num');
             Toast::info(__('Registro creado con éxito'));
         } else {
-            if ($code_ficha != $old_code_ficha || $category_id != $old_category_id)   $ficha->category()->increment('num');
+            if ($code_ficha != $old_code_ficha || $category_id != $old_category_id) {
+                $ficha->category()->increment('num');
+            }
             Toast::info(__('Registro actualizado con éxito'));
         }
 
-         if (!$ficha->status) {
- $role =  Role::where('name' ,'admin')->first();
-$users=$role->getUsers();
-            
-
-             $ficha = Ficha::with('category')->find($ficha->id);
-             $notificacion = new FichaCreada(__('Fichas'), __('Se creado o modificado una ficha, puede revisar la ficha antes de publicarla'), $ficha);
+        if (!$ficha->status) {
+            $role =  Role::where('name', 'admin')->first();
+            $users = $role->getUsers();
 
 
-             Notification::send($users, $notificacion);
+            $ficha = Ficha::with('category')->find($ficha->id);
+            $notificacion = new FichaCreada(__('Fichas'), __('Se creado o modificado una ficha, puede revisar la ficha antes de publicarla'), $ficha);
+
+
+            Notification::send($users, $notificacion);
         }
 
         //  Ficha::enableAuditing();
@@ -282,13 +282,18 @@ $users=$role->getUsers();
 
     public function publicarFicha(Ficha $ficha, Request $request)
     {
-
         $ficha->update([
             'status' =>  !$ficha->status,
         ]);
 
-        if ($ficha->status) {
 
+        if ($request->get('aceptar')) {
+            $ficha->update([
+                
+                'version' => $ficha->version + 1
+            ]);
+        }
+        if ($ficha->status) {
             $authorizedRoles = $ficha->roles->pluck('name');
 
             $users = User::whereHas('roles', static function ($query) use ($authorizedRoles) {
@@ -314,13 +319,9 @@ $users=$role->getUsers();
      */
     public function remove(Ficha $ficha)
     {
-
         try {
-
             $ficha->delete();
         } catch (\Illuminate\Database\QueryException $ex) {
-
-
             Alert::view('layouts.partials.alert', Color::DANGER(), [
                 'error' => $ex,
                 'message' => __('Eliminar Ficha')
@@ -337,13 +338,12 @@ $users=$role->getUsers();
 
 
 
+
     public function asyncCodigo($category_id = null, $old_category_id = null, $codigo = null, $old_codigo)
     {
-
-
         if ($old_category_id != null && $codigo != null &&  ($category_id == $old_category_id)) {
             $category_name = $old_codigo;
-        } else if ($old_category_id != null && ($category_id != $old_category_id)) {
+        } elseif ($old_category_id != null && ($category_id != $old_category_id)) {
             $category_name = Category::find($category_id)->num . '-'  . Category::find($category_id)->code;
         } else {
             $category_name = Category::find($category_id)->num . '-' . Category::find($category_id)->code;
@@ -362,8 +362,6 @@ $users=$role->getUsers();
     }
 
 
-
-
     /**
      * @param User $user
      *
@@ -371,79 +369,45 @@ $users=$role->getUsers();
      */
     public function asyncGetFicha(Ficha $ficha, Capitulo $capitulo): array
     {
-
         return [
             'ficha' => $ficha,
             'capitulo' => $capitulo
 
         ];
     }
-
-    public function cambiarVersion(Ficha $ficha, Request $request)
+    public function asyncGetDataEdit($id): array
     {
-        if ($request['aceptar']) {
-            $version = $ficha->version + 1;
-            $ficha->update([
-                'version' =>  $version,
-            ]);
-        }
+        $ficha = Ficha::find($id);
 
+        return [
+            'id' => $id,
+            'version' => $ficha->version,
+            'status' => $ficha->status
 
-
-
-
-        return redirect()->route('platform.ficha.edit', [$ficha->id]);
+        ];
     }
 
-    // public function asyncCambiarVersion(Ficha $ficha): array
-    // {
+   
+    public function vistaPreviaFicha(Ficha $ficha, Request $request)
+    {
+        return redirect()->route('fichas.fichaPDF', [$ficha->id]);
+    }
 
-
-    //     return [
-    //         'ficha' => $ficha,
-
-
-    //     ];
+     
+    public function vistaPreviaFichaPantalla(Ficha $ficha, Request $request)
+    {
+        return redirect()->route('fichas.show', [$ficha->id]);
+    }
     //}
 
     /**
      * @param User    $user
      * @param Request $request
      */
-    // public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
-    // {
-
-
-    //     $ficha = Ficha::find($ficha_id);
-
-    //     if ($request->id != null) {
-    //         $capitulo = Capitulo::find($request->id)->update([
-    //             'title' => $request->title,
-    //             'body' => $request->body,
-    //         ]);
-
-    //     } else {
-    //         $capitulo = $ficha->capitulos()->create(
-
-    //             array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
-    //         );
-    //     }
-
-    //     // $version = $capitulo->currentVersion();
-    //     //  dd($version);
-    //     // dd( array_merge($request->get('capitulo'), [ 'ficha_id' => $ficha_id, 'order' => $ficha->orderCapitulo()]));
-
-
-
-    //     Toast::info(__('Capitulo was saved.'));
-
-    //     return redirect()->route('platform.ficha.edit', [$ficha_id]);
-    // }
+    
 
     public function saveCapitulo($ficha_id, $capitulo_id = null, Request $request)
     {
-
-
         $ficha = Ficha::find($ficha_id);
         if ($request->capitulo['id'] != null) {
             $capitulo = Capitulo::find($request->capitulo['id'])->update([
@@ -452,7 +416,6 @@ $users=$role->getUsers();
             ]);
         } else {
             $capitulo = $ficha->capitulos()->create(
-
                 array_merge($request->get('capitulo'), ['ficha_id' => $ficha_id])
             );
         }
@@ -468,11 +431,10 @@ $users=$role->getUsers();
         return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }
 
+
+
     public function removeCapitulo($ficha_id, $capitulo_id)
     {
-
-
-
         Capitulo::find($capitulo_id)->forceDelete();
 
 
@@ -483,7 +445,6 @@ $users=$role->getUsers();
     }
     public function menosCapitulo($ficha_id, $capitulo_id)
     {
-
         Capitulo::find($capitulo_id)->moveOrderDown();;
 
         return redirect()->route('platform.ficha.edit', [$ficha_id]);
@@ -492,6 +453,18 @@ $users=$role->getUsers();
     public function masCapitulo($ficha_id, $capitulo_id)
     {
         Capitulo::find($capitulo_id)->moveOrderUp();
+
+        return redirect()->route('platform.ficha.edit', [$ficha_id]);
+    }
+
+    public function removeAuditCapitulo($audit_id, $ficha_id, Request $request)
+    {
+        Audit::find($audit_id)->delete();
+
+
+
+
+        Toast::warning(__('Registro eliminado.'));
 
         return redirect()->route('platform.ficha.edit', [$ficha_id]);
     }

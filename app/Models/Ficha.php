@@ -30,19 +30,20 @@ class Ficha extends Model implements Auditable
     use  Filterable;
     use Searchable;
     use Notifiable;
-  
-   
+
+
 
     protected $withCount = [  'capitulos','audits'];
 
 
     protected $fillable = [
-       
+
         'title',
         'category_id',
         'user_id',
         'code',
         'description',
+        'instalacion',
         'status',
         'version'
 
@@ -75,30 +76,33 @@ class Ficha extends Model implements Auditable
 
     protected $softCascade = ['capitulos'];
 
-    public static function boot() {
+    public static function boot()
+    {
+        parent::boot();
 
-	    parent::boot();
-
-	    static::created(function($item) {
-	        Log::info('Item Created Event:'.$item);
-	    });
+        static::created(function ($item) {
+            Log::info('Item Created Event:'.$item);
+        });
         self::deleting(function ($model) {
             $model->status = 0;
             $model->save();
         });
-
-
-	}
+    }
     public function generateTags(): array
     {
         return [
             $this->version,
-          
+
         ];
     }
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = Str::of($value)->upper();
+    }
+
+    public function setInstalacionAttribute($value)
+    {
+        $this->attributes['instalacion'] = Str::of($value)->upper();
     }
 
     public function presenter(): FichaPresenter
@@ -116,8 +120,8 @@ class Ficha extends Model implements Auditable
     public function toSearchableArray()
     {
         $array = $this->toArray();
-        
-    //$array = $this->only('title', 'description');
+
+        //$array = $this->only('title', 'description');
 
         // Customize array...
 
@@ -126,7 +130,6 @@ class Ficha extends Model implements Auditable
 
 
     public function category()
-
     {
         return $this->belongsTo(Category::class);
     }
@@ -153,16 +156,15 @@ class Ficha extends Model implements Auditable
 
     public function scopeOrderCapitulo($query)
     {
-
         return $this->capitulos()->max('order') + 1;
     }
 
 
-/**
- * {@inheritdoc}
- */
-public function ficha()
-{
-    return $this->morphTo()->withTrashed();
-}
+    /**
+     * {@inheritdoc}
+     */
+    public function ficha()
+    {
+        return $this->morphTo()->withTrashed();
+    }
 }

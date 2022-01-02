@@ -29,48 +29,44 @@ class CategoryListLayout extends Table
      */
     protected function columns(): array
     {
-
-    
         return [
 
-            TD::make('name',__( 'Nombre'))
+            TD::make('name', __('Nombre'))
                 ->cantHide(false)
-               
+
                 ->sort()
                 ->filter(TD::FILTER_TEXT)
-                ->render(function (Category $category)
-                {
+                ->render(function (Category $category) {
                     return Link::make($category->name)
                                 ->myTooltip(__('Editar Categoría'))
                                 ->class('px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 py-1')
-                                ->route('platform.category.edit' ,$category);
+                                ->route('platform.category.edit', $category);
                 }),
 
             TD::make('code', __('Código')),
 
-            
+
             TD::make('category.version', __('Versión')),
 
-            TD::make('description', __('Descripción ES'))
+            TD::make('description', __('Descripción'))
                 ->cantHide(false)
-               
+
                 // ->render(function (Category $category)
                 // {
                 //     return   Str::of($category->description)->limit(100, ' ...');
                 // })
 
-                ->render(function (Category $category)
-                {
+                ->render(function (Category $category) {
                     $categoria_title_eu = Str::of($category->description_eu)->limit(100, ' ...');
-                      
+
                     $categoria_title_es = Str::of($category->description)->limit(100, ' ...');
-                    
+
                     if ($category->description_eu) {
                         $categoria_title = $categoria_title_eu . '<br>' . $categoria_title_es;
-                    }else{
+                    } else {
                         $categoria_title = $categoria_title_es;
                     }
-                    return ModalToggle::make($categoria_title )
+                    return ModalToggle::make($categoria_title)
                     ->myTooltip(__('Ver descripción completa'))
                     ->icon('fa.book')
                     ->modal('oneAsyncModal')
@@ -80,39 +76,34 @@ class CategoryListLayout extends Table
                         'category' => $category->id,
                     ]);
                     ;
-
                 })
 
-                
 
-                
+
+
                 ,
             TD::make('num', __('Indice')),
 
             TD::make(__('Num. Fichas'))
                 ->cantHide(false)
-                
+
                 ->render(
-                    function (Category $category)
-                    {
+                    function (Category $category) {
                         return count($category->fichas);
                     }
                 ),
 
             TD::make('image', __('Imagen'))
                 ->cantHide(false)
-               
-                ->render(function (Category $category)
-                {
 
-
+                ->render(
+                    function (Category $category) {
                     return view('layouts.category_image', [
 
                         'image'    => $category->image,
 
                    ]);
                 }
-
                 ),
 
         ];

@@ -9,7 +9,6 @@ use Orchid\Screen\Fields\Quill;
 
 use Orchid\Screen\Layouts\Rows;
 
-
 class CapituloEditLayout extends Rows
 {
     /**
@@ -26,7 +25,6 @@ class CapituloEditLayout extends Rows
      */
     protected function fields(): array
     {
-
         return [
 
             Input::make('capitulo.id')
@@ -42,8 +40,8 @@ class CapituloEditLayout extends Rows
              Quill::make('capitulo.body')
              ->required()
                  ->title(__('Contenido')),
-            
-          
+
+
         ];
     }
 }

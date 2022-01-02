@@ -23,11 +23,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         TD::macro('bool', function () {
-
             $column = $this->column;
 
             $this->render = function ($datum) use ($column) {
-
                 return view('components.bool', [
                     'bool' => $datum->$column
                 ]);
@@ -57,7 +55,5 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $iconFinder->registerIconDirectory('fa', resource_path('icons/fontawesome'));
-
-        
     }
 }

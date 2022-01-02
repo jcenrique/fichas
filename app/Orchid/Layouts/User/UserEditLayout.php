@@ -27,8 +27,8 @@ class UserEditLayout extends Rows
                 ->disabled(!Auth::user()->domain == null)
                 ->title(__('Name'))
                 ->placeholder(__('Introduzca su nombre completo')),
-                
-           
+
+
 
             Input::make('user.email')
                 ->type('email')
@@ -36,17 +36,17 @@ class UserEditLayout extends Rows
                 ->disabled(!Auth::user()->domain == null)
                 ->title(__('Email'))
                 ->placeholder(__('Introduzca un nombre de Email')),
-            
+
             Select::make('user.locale')
                 ->required()
                 ->options([
                     'es' => __('Castellano'),
                     'eu' => __('Euskera'),
-                   
+
                 ])
                 ->title(__('Lenguaje'))
                 ->help(__('Seleccione el lenguaje de la aplicación')),
-                
+
         ];
     }
 }

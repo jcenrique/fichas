@@ -14,7 +14,7 @@ class FichaCreada extends Notification  //implements ShouldQueue
 {
     use Queueable;
 
-    private  $title;
+    private $title;
     private $message;
     private $ficha;
 
@@ -23,7 +23,7 @@ class FichaCreada extends Notification  //implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($title , $message , $ficha)
+    public function __construct($title, $message, $ficha)
     {
         $this->title=$title;
         $this->message=$message ;
@@ -31,7 +31,6 @@ class FichaCreada extends Notification  //implements ShouldQueue
         //$delay = now()->addMinutes(1);
 
         //$this->delay($delay);
-
     }
 
 
@@ -43,8 +42,8 @@ class FichaCreada extends Notification  //implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return [DashboardChannel::class];
-       // return ['mail' , DashboardChannel::class];
+        //return [DashboardChannel::class];
+         return ['mail' , DashboardChannel::class];
     }
 
     /**
@@ -55,8 +54,7 @@ class FichaCreada extends Notification  //implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-
-        return (new MailMessage)
+        return (new MailMessage())
                     ->line($this->message)
                     ->line(__('Categoría') . ': ' . $this->ficha->category->name)
                     ->line(__('Código') . ': ' . $this->ficha->code)
@@ -80,11 +78,11 @@ class FichaCreada extends Notification  //implements ShouldQueue
     }
 
     public function toDashboard($notifiable)
-{
-    return (new DashboardMessage())
+    {
+        return (new DashboardMessage())
         ->title('Actualizada o creada ficha')
         ->type(Color::SUCCESS())
         ->message($this->ficha->toJson())
         ->action(url('/ficha/show/' . $this->ficha->id));
-}
+    }
 }

@@ -36,7 +36,6 @@ class FichaObserver
      */
     public function deleted(Ficha $ficha)
     {
-
     }
 
     /**
@@ -47,7 +46,6 @@ class FichaObserver
      */
     public function restored(Ficha $ficha)
     {
-
     }
 
 

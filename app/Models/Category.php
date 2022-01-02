@@ -11,9 +11,8 @@ use Orchid\Screen\AsSource;
 
 class Category extends Model
 {
-   
     use HasFactory;
-   use AsSource;
+    use AsSource;
     use Filterable;
 
     protected $withCount = [ 'fichas'];
@@ -27,7 +26,7 @@ class Category extends Model
         'image'
     ];
 
-        /**
+    /**
      * Name of columns to which http sorting can be applied
      *
      * @var array
@@ -42,7 +41,7 @@ class Category extends Model
  *
  * @var array
  */
-protected $allowedFilters = [
+    protected $allowedFilters = [
     'name',
 ];
 
@@ -63,6 +62,4 @@ protected $allowedFilters = [
     {
         $this->attributes['code'] = mb_strtoupper($value);
     }
-
-    
 }

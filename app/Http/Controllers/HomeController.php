@@ -9,23 +9,18 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function __invoke()
-
-
     {
-     
-     
-        
         $this->authorize('acceso', Category::class);
 
         //$categorias =Category::all();
-       
-		
-       
+
+
+
         $categorias = Category::withCount(['fichas' => function ($query) {
             $query->where('status', 1);
         }])->get();
-       
-        
-        return view('welcome' ,compact('categorias'));
+
+
+        return view('welcome', compact('categorias'));
     }
 }

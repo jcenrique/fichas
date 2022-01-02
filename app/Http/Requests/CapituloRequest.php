@@ -26,7 +26,7 @@ class CapituloRequest extends FormRequest
         return [
             'title' => 'required|min:5|max:100',
             'body' => 'required|min:50',
-          
+
         ];
     }
 
@@ -38,19 +38,19 @@ class CapituloRequest extends FormRequest
              'title.min' => "El :attribute debe contener minimo  5 caracteres",
              'title.max' => "El :attribute debe contener 100 caracteres como máximo",
              'body.min' => "El :attribute debe contener minimo  50 caracteres",
-           
+
 
 
         ];
     }
 
     public function attributes()
- {
-     return [
+    {
+        return [
          'title' => 'título',
          'body' => 'contenido',
-       
+
 
      ];
-}
+    }
 }

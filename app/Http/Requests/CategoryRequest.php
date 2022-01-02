@@ -46,13 +46,13 @@ class CategoryRequest extends FormRequest
     }
 
     public function attributes()
- {
-     return [
+    {
+        return [
          'category.name' => 'ficha',
          'category.description' => 'descripción',
          'category.code' => 'código',
 
 
      ];
-}
+    }
 }

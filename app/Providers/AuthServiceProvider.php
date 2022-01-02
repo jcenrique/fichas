@@ -33,14 +33,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-       
         $this->registerPolicies();
 
-      
-        
+
+
         Fortify::authenticateUsing(function ($request) {
-           
             $validated = Auth::validate([
                 'name' => $request->name,
                 'password' => $request->password,
@@ -49,13 +46,12 @@ class AuthServiceProvider extends ServiceProvider
                     'password' => $request->password,
                 ],
             ]);
-           
+
             return $validated ? Auth::getLastAttempted() : null;
         });
 
         RateLimiter::for("login", function () {
             Limit::perMinute(50);
         });
-        
     }
 }

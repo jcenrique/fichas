@@ -19,34 +19,32 @@ class CapituloEditScreen extends Screen
      */
     public $name = 'Editar Capitulo';
 
-    public  $capitulo;
-    
-   
+    public $capitulo;
+
+
     /**
      * Query data.
      *
      * @return array
      */
 
-     public function __construct()
-     {
-         
+    public function __construct()
+    {
+
         // $ficha->ficha = $ficha;
-     }
+    }
     public function query(Capitulo $capitulo): array
     {
-        
-            $this->exists= $capitulo->exists;
-        if ($this->exists){
+        $this->exists= $capitulo->exists;
+        if ($this->exists) {
             $this->name= __('Editar capítulo');
         }
-       
-     
+
+
         return [
             'capitulo' =>$capitulo,
-           
+
         ];
-        
     }
 
     /**
@@ -60,9 +58,9 @@ class CapituloEditScreen extends Screen
             Button::make(__('Actualizar'))
                 ->icon('note')
                 ->method('createOrUpdate')
-              
-            
-            
+
+
+
         ];
     }
 
@@ -81,16 +79,10 @@ class CapituloEditScreen extends Screen
 
     public function createOrUpdate(Capitulo $capitulo, CapituloRequest $request)
     {
-
-       
-
         $capitulo->fill($request->all())->save();
 
         Toast::info(__('Registro guardado con éxito'));
 
-        return redirect()->route('platform.ficha.edit',$capitulo->ficha->id);
-
+        return redirect()->route('platform.ficha.edit', $capitulo->ficha->id);
     }
-
-  
 }

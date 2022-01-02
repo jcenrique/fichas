@@ -20,7 +20,7 @@ class User extends Authenticatable implements LdapAuthenticatable
     use Searchable;
     use AsSource;
     use HasFactory;
-   
+
 
     use AuthenticatesWithLdap;
 
@@ -30,8 +30,8 @@ class User extends Authenticatable implements LdapAuthenticatable
      * @var array
      */
     protected $fillable = [
-       
-        
+
+
         'email',
         'name',
         'guid',
@@ -70,7 +70,7 @@ class User extends Authenticatable implements LdapAuthenticatable
     protected $allowedFilters = [
         'id',
         'name',
-       
+
         'email',
         'permissions',
     ];
@@ -83,7 +83,7 @@ class User extends Authenticatable implements LdapAuthenticatable
     protected $allowedSorts = [
         'id',
         'name',
-       
+
         'email',
         'updated_at',
         'created_at',
@@ -97,7 +97,6 @@ class User extends Authenticatable implements LdapAuthenticatable
                 // if tags are not provided on creation
                 $user->permissions=  ['home' => true];  // set empty json array
             }
-            
         });
     }
 }

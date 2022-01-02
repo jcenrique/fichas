@@ -24,16 +24,12 @@ class AuditCapituloTable extends Table
      */
     protected function columns(): array
     {
-
-
         return [
 
             TD::make('title', __('Capitulos'))
                 ->width('650px')
                 ->render(function ($capitulo) {
-
-                    return  view('layouts.fichas.audit-detalle-capitulo',['capitulo'=> $capitulo]);
-
+                    return  view('layouts.fichas.audit-detalle-capitulo', ['capitulo'=> $capitulo]);
                 }),
 
 

@@ -8,9 +8,8 @@ use Orchid\Support\Color;
 use Laravel\Scout\Builder;
 use Orchid\Screen\Contracts\Searchable;
 
-class FichaPresenter extends Presenter implements Cardable,Searchable
+class FichaPresenter extends Presenter implements Cardable, Searchable
 {
-
     public function label(): string
     {
         return __('Fichas');
@@ -19,7 +18,6 @@ class FichaPresenter extends Presenter implements Cardable,Searchable
 
     public function title(): string
     {
-
         return $this->entity->title;
     }
     public function subTitle(): string
@@ -28,15 +26,14 @@ class FichaPresenter extends Presenter implements Cardable,Searchable
     }
     public function description(): string
     {
-
         return $this->entity->description;
     }
-     /**
-     * @return string
-     */
+    /**
+    * @return string
+    */
     public function url(): string
     {
-        return route('fichas.show',['id' => $this->entity->id]);
+        return route('fichas.show', ['id' => $this->entity->id]);
     }
 
     public function image(): ?string
@@ -57,8 +54,7 @@ class FichaPresenter extends Presenter implements Cardable,Searchable
      */
     public function searchQuery(string $query = null): Builder
     {
-
-        return $this->entity->search( 'title LIKE %' . $query . '%')->where('status', true);
+        return $this->entity->search('title LIKE %' . $query . '%')->where('status', true);
     }
 
     /**

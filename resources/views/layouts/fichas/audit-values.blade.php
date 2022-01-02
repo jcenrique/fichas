@@ -4,7 +4,7 @@
 
     <div>
         <div class="text-sm text-gray-500 text-left">
-            {{__('Valor Anterior')}}
+            {{__('Valor Anterior')}} 
 
         </div>
         <div class="text-gray-700  text-left pl-6 ">

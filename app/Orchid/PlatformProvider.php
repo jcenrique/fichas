@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace App\Orchid;
 
 use Illuminate\Support\Facades\App;
@@ -21,7 +20,6 @@ class PlatformProvider extends OrchidServiceProvider
     public function boot(Dashboard $dashboard): void
     {
         parent::boot($dashboard);
-      
     }
 
     /**
@@ -78,7 +76,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.profile', __('Profile'))
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users'))
-                
+
         ];
     }
 

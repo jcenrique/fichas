@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDescriptionEuToCategoriesTable extends Migration
+class AddIntalacionToFichasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddDescriptionEuToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->text('description_eu')->nullable()->after('image');
+        Schema::table('fichas', function (Blueprint $table) {
+            $table->string('instalacion')->nullable()->after('version');
         });
     }
 
@@ -25,8 +25,8 @@ class AddDescriptionEuToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('description_eu', function (Blueprint $table) {
-            //
+        Schema::table('fichas', function (Blueprint $table) {
+            $table->dropColumn('instalacion');
         });
     }
 }

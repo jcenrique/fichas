@@ -8,7 +8,6 @@ use Orchid\Crud\Filters\WithTrashed;
 use Orchid\Filters\Filter;
 use Orchid\Screen\Layouts\Selection;
 
-
 class CategorySelection extends Selection
 {
     /**

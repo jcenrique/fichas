@@ -26,7 +26,10 @@ class UserProfileScreen extends Screen
      * @var string
      */
     public $name = 'My account';
-
+   /**
+     * @var string
+     */
+    public $permission = 'platform.systems.profile';
     /**
      * Display header description.
      *
@@ -63,7 +66,6 @@ class UserProfileScreen extends Screen
      */
     public function layout(): array
     {
-       
         return [
             Layout::block(UserEditLayout::class)
                 ->title(__('Profile Information'))

@@ -8,7 +8,6 @@ use Orchid\Screen\Contracts\Cardable;
 
 class CategoryPresenter extends Presenter implements Cardable
 {
-
     public function title(): string
     {
         return $this->entity->name;

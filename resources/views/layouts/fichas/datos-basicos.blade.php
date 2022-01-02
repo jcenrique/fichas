@@ -36,6 +36,13 @@ use Orchid\Screen\Fields\Upload;
 
 !!} 
 
+{!! TextArea::make( )
+    ->title(__('Instalación'))
+        ->value($ficha->instalacion)
+        ->disabled(true)
+
+!!}
+
 {!! Relation::make( )
     ->title(__('Roles'))
     ->fromModel(Role::class, 'name')

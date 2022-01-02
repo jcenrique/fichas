@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Layouts\Fichas;
 
-
 use App\Models\User;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Group;
@@ -32,7 +31,6 @@ class FichasEditLayout extends Rows
      */
     protected function fields(): array
     {
-
         return [
 
             Relation::make('ficha.user_id')
@@ -57,6 +55,14 @@ class FichasEditLayout extends Rows
                 ->rows(3)
                 ->maxlength(200)
                 ->placeholder(__('Breve descripción para vista previa')),
+            
+            Input::make('ficha.instalacion')
+                ->title(__('Instalación'))
+                ->class('form-control uppercase')
+                ->disabled($this->query['ficha']->status ? true : false)
+               
+                ->maxlength(200)
+                ->placeholder(__('Ubicación de la instalación')),
 
             Relation::make('ficha.roles')
                 ->fromModel(Role::class, 'name')

@@ -6,8 +6,6 @@ use Illuminate\View\Component;
 
 class Search extends Component
 {
-
-
     public $search = "Mi busqueda";
 
     public $results;
@@ -18,7 +16,7 @@ class Search extends Component
      */
     public function __construct()
     {
-    //    $this->search=$search;
+        //    $this->search=$search;
     //    $this->results =$results;
     }
 

@@ -31,8 +31,6 @@ class FichaListLayout extends Table
      */
     protected function columns(): array
     {
-
-
         return [
             TD::make('id')
                 ->canSee($this->query['withTrashed'])
@@ -45,7 +43,7 @@ class FichaListLayout extends Table
 
 
             TD::make('category_id', __('Categoría'))
-                // ->width('200px') 
+                // ->width('200px')
                 ->sort()
 
                 ->render(function (Ficha $ficha) {
@@ -79,9 +77,12 @@ class FichaListLayout extends Table
 
 
             TD::make('description', __('Descripción'))
-
+            
+                
                 ->render(function (Ficha $ficha) {
-                    return  Str::of($ficha->description)->limit(100, ' ...');
+                  
+                    return view('layouts.fichas.description-ficha-column',['ficha' => $ficha]) ;
+                    
                 })
 
                 ->cantHide(false),
@@ -95,17 +96,17 @@ class FichaListLayout extends Table
                     if ($this->query['withTrashed']) {
                         return  view('components.bool', ['bool' => $ficha->status]);
                     } else {
-
                         return ModalToggle::make($ficha->status ? __('Publicada') : __('Borrador'))
                             ->modal('modalStatus')
                             ->myTooltip($ficha->status ? __('Poner en borrador') : __('Publicar ficha'))
 
                             ->popover($ficha->title)
-                            ->class($ficha->status ?  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1' :
+                            ->class($ficha->status ? 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 py-1' :
                                 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 py-1')
                             ->method('publicar')
                             //->parameters(['id' => $ficha->id, 'status' => $ficha->status])
-                            ->asyncParameters([$ficha->id]);;
+                            ->asyncParameters([$ficha->id]);
+                        ;
                     }
                 })
                 ->cantHide(false),

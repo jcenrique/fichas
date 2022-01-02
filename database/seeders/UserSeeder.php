@@ -19,16 +19,18 @@ class UserSeeder extends Seeder
         
 
         //cargar usuarios ldap ficticios
-       Artisan::call('ldap:import',['provider' => 'ldap', '--no-interaction']);
+    //    Artisan::call('ldap:import',['provider' => 'ldap', '--no-interaction']);
      
-       $users = User::all();
-       foreach ($users as $user) {
-           $user->addRole(Role::all()->random());
-       }
+    //    $users = User::all();
+    //    foreach ($users as $user) {
+    //        $user->addRole(Role::all()->random());
+    //    }
 
        //crear usuario admin
        Artisan::call('orchid:admin' , ['name' => 'admin' , 'email' => 'jcenrique170@gmail.com' , 'password' => '1234qwer']);
-       
+       $user = User::where('email', '=' ,'jcenrique170@gmail.com')->first();
+       $user->addRole(Role::where('slug', '=','admin')->first());
+
 
     }
 }

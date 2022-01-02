@@ -35,4 +35,3 @@ class PermissionServiceProvider extends ServiceProvider
         $dashboard->registerPermissions($permissions);
     }
 }
-

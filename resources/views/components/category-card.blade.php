@@ -6,9 +6,9 @@
 
     <div class="card-body grid grid-cols-1 gap-2 place-content-start">
 
-        <div class="flex flex-wrap justify-between items-baseline">
+        <div class="flex flex-col justify-between items-baseline">
 
-            <h1 class="card-title text-xl font-bold text-gray-400">{{$categoria->name}}</h1>
+            <h1 class="w-full card-title text-xl font-bold text-gray-400 break-words">{{$categoria->name}}</h1>
 
             <p class="text-sm text-red-800">
                 {{__('Fichas')}}: <small> ({{$categoria->fichas_count}})</small>
@@ -20,14 +20,14 @@
         <p class="text-sm text-justify text-gray-500 italic">
             {{$categoria->description_eu}}
         </p>
-        <hr> 
+        <hr>
         @endif
-        
+
         <p class="text-sm text-justify text-gray-500">
             {{$categoria->description}}
         </p>
-       
-        
+
+
 
     </div>
 

@@ -71,7 +71,7 @@ class EmailSenderScreen extends Screen
                     ->required()
                     ->placeholder('Dirección de correo')
                     ->help('Introduzca los destinatarios a los que desea enviar un correo')
-                    ->fromModel(User::class,'name', 'email'),
+                    ->fromModel(User::class, 'name', 'email'),
 
                 Quill::make('content')
                     ->title('Contenido')

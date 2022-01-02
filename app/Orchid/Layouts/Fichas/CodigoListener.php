@@ -26,7 +26,7 @@ class CodigoListener extends Listener
         'old_category_id',
         'codigo',
         'old_codigo',
-     
+
 
     ];
 
@@ -56,7 +56,6 @@ class CodigoListener extends Listener
      */
     protected function layouts(): array
     {
-
         return [
             Layout::rows([
 
@@ -66,13 +65,13 @@ class CodigoListener extends Listener
                     ->title(__('Seleccionar categoría'))
                     ->fromModel(Category::class, 'name'),
 
-                 
+
 
                 Input::make('old_category_id')
                     ->type('hidden')
                     ->readonly(),
 
-                
+
 
                 Input::make('codigo')
                     ->title(__('Codificación'))

@@ -20,20 +20,18 @@ class CategoryPolicy
      */
     public function viewAny(User $user)
     {
-
         return Auth::user()->hasAccess('platform.fichas.categories');
     }
 
 
-     /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
+    /**
+    * Determine whether the user can view any models.
+    *
+    * @param  \App\Models\User  $user
+    * @return \Illuminate\Auth\Access\Response|bool
+    */
     public function index(User $user)
     {
-
         return Auth::user()->hasAccess('platform.fichas.categories');
     }
 
@@ -46,7 +44,6 @@ class CategoryPolicy
      */
     public function view(User $user, Category $category)
     {
-
         return Auth::user()->hasAccess('platform.fichas.categories');
     }
 
@@ -58,7 +55,6 @@ class CategoryPolicy
      */
     public function create(User $user)
     {
-
         return Auth::user()->hasAccess('platform.fichas.categories');
     }
 
@@ -71,7 +67,6 @@ class CategoryPolicy
      */
     public function update(User $user, Category $category)
     {
-
         return Auth::user()->hasAccess('platform.fichas.categories');
     }
 
@@ -113,6 +108,6 @@ class CategoryPolicy
 
     public function acceso(User $user)
     {
-       return   Auth::user()->hasAccess('home');
+        return   Auth::user()->hasAccess('home');
     }
 }

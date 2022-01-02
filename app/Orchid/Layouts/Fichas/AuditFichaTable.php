@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Fichas;
 
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -24,35 +25,29 @@ class AuditFichaTable extends Table
      */
     protected function columns(): array
     {
-
         return [
             TD::make('code', __('Código'))
 
 
                 ->render(function ($audit) {
-
-
                     if ((isset($audit->old_values['code']) && isset($audit->new_values['code'])) &&  ($audit->old_values['code'] !=  $audit->new_values['code'])) {
                         return view('layouts.fichas.audit-values', ['old_value' => $audit->old_values['code'], 'new_value' => $audit->new_values['code'], 'audit' => $audit]);
                     } else {
                         return view('layouts.fichas.audit-values');
                     }
                     //return view('layouts.fichas.audit-values',['old_value' => $audit->old_values['title'] , 'new_value' => $audit->new_values['title']]);
-
                 }),
 
             TD::make('title', __('Título'))
 
 
                 ->render(function ($audit) {
-
                     if ((isset($audit->old_values['title']) && isset($audit->new_values['title'])) &&  ($audit->old_values['title'] !=  $audit->new_values['title'])) {
                         return view('layouts.fichas.audit-values', ['old_value' => $audit->old_values['title'], 'new_value' => $audit->new_values['title'], 'audit' => $audit]);
                     } else {
                         return view('layouts.fichas.audit-values');
                     }
                     //return view('layouts.fichas.audit-values',['old_value' => $audit->old_values['title'] , 'new_value' => $audit->new_values['title']]);
-
                 }),
             TD::make('description', __('Descripción'))
 
@@ -64,6 +59,15 @@ class AuditFichaTable extends Table
                         return view('layouts.fichas.audit-values');
                     }
                 }),
+                TD::make('instalacion', __('Instalación'))
+                ->render(function ($audit) {
+                    if ((isset($audit->old_values['instalacion']) && isset($audit->new_values['instalacion']))  &&  ($audit->old_values['instalacion'] !=  $audit->new_values['instalacion'])) {
+                        return view('layouts.fichas.audit-values', ['old_value' => $audit->old_values['instalacion'], 'new_value' => $audit->new_values['instalacion'], 'audit' => $audit]);
+                    } else {
+                        return view('layouts.fichas.audit-values');
+                    }
+                }),
+
         ];
     }
 

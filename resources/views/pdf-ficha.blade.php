@@ -247,7 +247,7 @@
                         <td width="85%" align="center" colspan=3
                             style="font-family:'Verdana',sans-serif; border: 1px solid gray;height: 10px;">
 
-                            <p style="color:gray;margin: 0px;">
+                            <p style="font-size:10pt ;color:gray;margin: 0px;">
                                 <b><span>
                                         {{$ficha->title}}
                                     </span></b>
@@ -260,11 +260,11 @@
                     </tr>
                     <tr>
                         <td width="15%" align="center"
-                            style="font-size:8.0pt;font-family:'Verdana',sans-serif; border: 1px solid gray;height: 50px;">
+                            style="font-size:8.0pt;font-family:'Verdana',sans-serif; border: 1px solid gray;height: 40px;">
 
                             <p style="color:gray;margin: 0px;">
                                 <b><span>
-                                        {{__('INSTALACIONES / DESCRIPCIÓN')}}
+                                        {{__('DESCRIPCIÓN')}}
                                     </span></b>
                             </p>
 
@@ -274,7 +274,7 @@
                         <td width="85%" align="center" colspan=3
                             style="font-family:'Verdana',sans-serif; border: 1px solid gray">
 
-                            <p style="color:gray;margin: 0px;">
+                            <p style="font-size:8pt ;color:gray;margin: 0px;">
                                 <b><span>
                                         {{$ficha->description}}
                                     </span></b>
@@ -285,6 +285,36 @@
 
 
                     </tr>
+                    @if ($ficha->instalacion)
+                    <tr>
+                        <td width="15%" align="center"
+                            style="font-size:8pt;font-family:'Verdana',sans-serif; border: 1px solid gray;height: 30px;">
+
+                            <p style="color:gray;margin: 0px;">
+                                <b><span>
+                                        {{__('INSTALACIÓN')}}
+                                    </span></b>
+                            </p>
+
+
+                        </td>
+
+                        <td width="85%" align="center" colspan=3
+                            style="font-size:8pt;font-family:'Verdana',sans-serif; border: 1px solid gray">
+
+                            <p style="color:indigo;margin: 0px;">
+                                <b><span>
+                                        {{$ficha->instalacion}}
+                                    </span></b>
+                            </p>
+
+
+                        </td>
+
+
+                    </tr>
+                    @endif
+                    
                 </table>
 
             </div>

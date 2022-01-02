@@ -21,7 +21,7 @@
                </div>
                <div class="col-md-10">
                     <h3>{{__('OPPSSS!!!! Lo sentimos...')}}</h3>
-                    <p>{{__('Lo sentimos, su acceso es denegado por razones de seguridad de nuestro servidor y también de nuestros datos sensibles.<br/>Regrese a la página anterior para continuar navegando.')}}</p>
+                    <p>{!!__('Lo sentimos, su acceso es denegado por razones de seguridad de nuestro servidor y también de nuestros datos sensibles.<br/>Regrese a la página anterior para continuar navegando.')!!}</p>
                     <a class="btn btn-danger" href="{{  route('home') }}">{{__('Volver atras')}}</a>
                </div>
           </div>
