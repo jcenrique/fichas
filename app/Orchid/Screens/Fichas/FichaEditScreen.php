@@ -97,18 +97,19 @@ class FichaEditScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Button::make(__('Vista pantalla'))
+            Link::make(__('Vista pantalla'))
             ->icon('magnifier')
             ->myTooltip(__('Muestra una vista prevía con el formato en pantalla'))
-            ->method('vistaPreviaFichaPantalla')
+            ->route('fichas.show', [$this->ficha->id])
+            ->target('_blank')
 
             ->canSee($this->exists && !$this->status),
 
-            Button::make(__('Vista impresión'))
+            Link::make(__('Vista impresión'))
                 ->icon('magnifier')
                 ->myTooltip(__('Muestra una vista prevía de impresión'))
-                ->method('vistaPreviaFicha')
-
+                ->route('fichas.fichaPDF', [$this->ficha->id])
+                ->target('_blank')
                 ->canSee($this->exists && !$this->status),
 
          
@@ -388,18 +389,7 @@ class FichaEditScreen extends Screen
     }
 
    
-    public function vistaPreviaFicha(Ficha $ficha, Request $request)
-    {
-        return redirect()->route('fichas.fichaPDF', [$ficha->id]);
-    }
-
-     
-    public function vistaPreviaFichaPantalla(Ficha $ficha, Request $request)
-    {
-        return redirect()->route('fichas.show', [$ficha->id]);
-    }
-    //}
-
+  
     /**
      * @param User    $user
      * @param Request $request
