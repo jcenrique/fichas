@@ -12,8 +12,7 @@
 
     <span class="align-self-start text-{{ $notification->data['type'] }} @if($notification->read()) opacity @endif pull-left m-t-sm small">
         <x-orchid-icon path="fa.circle" class="me-2 {{$color_notification}}"/>
-           
-    </span>
+        </span>
 
     <span class="w-full @if($notification->read()) opacity-50 @endif  ">
         <span class="w-100 w-b-k w-s-n">{{$notification->data['title'] ?? ''}}</span>
@@ -28,24 +27,24 @@
                 @endphp
    
                 <div class="text-lg  font-medium mt-2">
-                   <div class="grid grid-cols-12  place-items-start" >
-                        <div class="flex">
+                   <div class="flex flex-row flex-wrap" >
+                        <div class="flex ml-2">
                             <x-orchid-icon path="fa.chart-line" class="mr-2 h-8 text-yellow-500"  />
                         
                            <small class="font-normal  " >{{__('Categoría:')}}</small> 
                         </div>
                        
-                        <span class="" > {{$message->category->name}}</span>
+                        <span class="ml-4" > {{$message->category->name}}</span>
                           
                        
                     </div>
-                    <div class="grid grid-cols-12 place-items-start  mb-2" >
-                        <div class="flex">
+                    <div class="flex flex-row flex-wrap" >
+                        <div class="flex ml-2">
                             <x-orchid-icon path="fa.layer-group" class="mr-2 h-8 text-yellow-500 "  />
                            
                             <small class="font-normal" >{{__('Código:')}}</small>  
                         </div> 
-                            <span class="" >{{$message->code}}</span>
+                            <span class="ml-4" >{{$message->code}}</span>
                            
                         
                     </div>
@@ -54,13 +53,13 @@
                <div class=" p-4 border-1 shadow-sm w-full">
                 <div class="text-xl font-medium">
                     {{$message->title}}
-                    <div class="grid grid-cols-12 place-items-start  mb-2" >
+                    <div class="flex flex-row flex-wrap  mb-2" >
                         <div class="flex text-base">
                             <x-orchid-icon path="fa.code-branch" class="mr-2 h-8 text-yellow-500 "  />
                            
-                            <span class="" >{{__('Versión:')}}</span>  
+                            <span class="font-normal" >{{__('Versión:')}}</span>  
                         </div> 
-                            <span class="" >{{$message->version}}</span>
+                            <span class="ml-4" >{{$message->version}}</span>
                            
                         
                     </div>
