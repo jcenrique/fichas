@@ -158,6 +158,7 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
+     
         $request->validate([
             'user.email' => [
                 'required',
@@ -174,6 +175,8 @@ class UserEditScreen extends Screen
             ->toArray();
 
         $userData = $request->get('user');
+        $locale = $userData['locale'];
+       
         if ($user->exists && (string)$userData['password'] === '') {
             // When updating existing user null password means "do not change current password"
             unset($userData['password']);
@@ -183,10 +186,13 @@ class UserEditScreen extends Screen
 
         $user
             ->fill($userData)
+            
             ->fill([
                 'permissions' => $permissions,
             ])
             ->save();
+            $user->locale= $locale;
+            $user->save();
 
         $user->replaceRoles($request->input('user.roles'));
 

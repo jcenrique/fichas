@@ -24,7 +24,7 @@ class UserEditLayout extends Rows
                 ->type('text')
                 ->max(255)
                 ->required()
-                ->disabled(!Auth::user()->domain == null)
+                ->readonly(!Auth::user()->domain == null)
                 ->title(__('Name'))
                 ->placeholder(__('Introduzca su nombre completo')),
 
@@ -33,7 +33,7 @@ class UserEditLayout extends Rows
             Input::make('user.email')
                 ->type('email')
                 ->required()
-                ->disabled(!Auth::user()->domain == null)
+                ->readonly(!Auth::user()->domain == null)
                 ->title(__('Email'))
                 ->placeholder(__('Introduzca un nombre de Email')),
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\UserCreado;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Scout\Searchable;
 use Orchid\Platform\Models\User as Authenticatable;
@@ -10,6 +11,7 @@ use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
+use Illuminate\Support\Facades\Notification;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory ;
 
@@ -91,12 +93,30 @@ class User extends Authenticatable implements LdapAuthenticatable
     protected static function boot()
     {
         parent::boot();
-
+      
         static::creating(function ($user) {
             if ($user->permissions === null) {
                 // if tags are not provided on creation
                 $user->permissions=  ['home' => true];  // set empty json array
+
+                 
             }
+
+           
+        });
+
+        static::created(function ($user){
+
+            //notificar al administrador para asigna role
+           
+            $role =  Role::where('name', 'admin')->first();
+            $users = $role->getUsers();
+
+              
+            $notificacion = new UserCreado(('Un nuevo usuario ha accedido al sistema, debe asignar el rol correspondiente al usuario'), $user);
+
+
+            Notification::send($users, $notificacion);
         });
     }
 }
