@@ -115,7 +115,7 @@ class UserEditScreen extends Screen
 
             Layout::block(UserPasswordLayout::class)
                 ->title(__('Password'))
-
+                
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(
                     Button::make(__('Save'))

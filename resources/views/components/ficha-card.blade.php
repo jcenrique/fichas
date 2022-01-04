@@ -15,13 +15,13 @@
         <div class="flex flex-wrap justify-between items-baseline ">
             <div>
                 <div class="text-sm text-red-800">  {{$category==null?$ficha->category->name :''}}</div>
-                <h1 class="card-title text-xl font-bold text-gray-400 break-all">{{$ficha->title}} </h1>
+                <h1 class="card-title text-xl font-bold text-gray-400 break-words">{{$ficha->title}} </h1>
                 <div class="font-mono text-xl font-bold text-red-800">{{  $ficha->code  }}</div>
 
 
                 <div class="text-sm text-justify text-gray-500 mt-4">
                     <div class="underline mb-2">{{__('Descripción')}}:</div>
-                    <div class="mb-4 ml-1 text-base break-all"> {{$ficha->description}}</div>
+                    <div class="mb-4 ml-1 text-base break-words"> {{$ficha->description}}</div>
                 </div>
             </div>
 

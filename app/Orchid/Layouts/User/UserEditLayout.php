@@ -19,12 +19,15 @@ class UserEditLayout extends Rows
      */
     public function fields(): array
     {
+       $user = $this->query->get('user');
+
+      // dd(is_null($user->domain));
         return [
             Input::make('user.name')
                 ->type('text')
                 ->max(255)
                 ->required()
-                ->readonly(!Auth::user()->domain == null)
+                ->readonly(isset($user->domain ))
                 ->title(__('Name'))
                 ->placeholder(__('Introduzca su nombre completo')),
 
@@ -33,7 +36,7 @@ class UserEditLayout extends Rows
             Input::make('user.email')
                 ->type('email')
                 ->required()
-                ->readonly(!Auth::user()->domain == null)
+                ->readonly(isset($user->domain))
                 ->title(__('Email'))
                 ->placeholder(__('Introduzca un nombre de Email')),
 

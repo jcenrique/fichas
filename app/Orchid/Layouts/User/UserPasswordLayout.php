@@ -23,10 +23,13 @@ class UserPasswordLayout extends Rows
         $placeholder = $user->exists
             ? __('Leave empty to keep current password')
             : __('Enter the password to be set');
-
+        $placeholder =  $user->domain==null 
+            ? $placeholder 
+            : __('El usuario no admite el cambio de contraseña');  ;
         return [
             Password::make('user.password')
                 ->placeholder($placeholder)
+                ->readonly(!$user->domain==null)
                 ->title(__('Password')),
         ];
     }
