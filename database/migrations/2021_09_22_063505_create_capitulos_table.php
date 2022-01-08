@@ -16,7 +16,7 @@ class CreateCapitulosTable extends Migration
         Schema::create('capitulos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ficha_id')->constrained('fichas')->cascadeOnDelete();
-            $table->integer('orden')->nullable();
+            $table->integer('order')->nullable();
 
             $table->string('title');
             $table->unique(['ficha_id', 'title']);
