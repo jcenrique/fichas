@@ -69,8 +69,8 @@
                         </path>
                     </svg>
                 </button>                  
-                <div class="hidden md:block space-x-2">
-                    <x-item title="{{__('Inicio')}}" active="{{request()->routeIs('home')}}" href="{{route('home')}}"/>
+                <div class="hidden md:block space-x-2 ">
+                    <x-item title="{{__('Inicio')}}" active="{{request()->routeIs('home')}}" href="{{route('home')}}" />
                     <x-item title="{{__('Fichas')}}" active="{{request()->routeIs('fichas.list')}}" href="{{route('fichas.list')}}"/>
                     <x-item title="{{__('Admin')}}"  href="{{route('platform.fichas.list')}}" hidden="{{Auth::user()->getRoles()->contains('slug', 'admin')? '':'hidden'}}"/>
                     <x-item title="{{__('Perfil')}}" href="{{route('platform.profile')}}" hidden="{{!Auth::user()->getRoles()->contains('slug', 'admin')? '':'hidden'}}"/>
@@ -94,8 +94,12 @@
                 </form>
                 </div>
                 <div class="flex">
-                    <div class="mr-4">
-                        {{Auth::user()->name}}
+                    <div class=" mr-4 ">
+                        <div>
+                            {{Auth::user()->name}}
+                        </div>
+                       
+                        <small class="hidden md:block text-gray-500">{{Auth::user()->getRoles()->implode('name' , '|')}}</small>
                     </div>
                     <div class="mt-2">
                         <x-orchid-notification/>

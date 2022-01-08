@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Observers\OnlySearchableModelObserver;
+use App\Orchid\Presenters\CapituloPresenter;
 use Illuminate\Support\Str;
 use Orchid\Attachment\Attachable;
 use Spatie\EloquentSortable\Sortable;
@@ -11,6 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Scope;
+use Laravel\Scout\Searchable;
+
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Capitulo extends Model implements Sortable, Auditable
@@ -19,34 +24,34 @@ class Capitulo extends Model implements Sortable, Auditable
     use HasFactory;
     use SoftDeletes;
     use Attachable;
-
+    use Searchable;
     use SortableTrait;
 
-    protected $withCount = [  'audits'];
+    protected $withCount = ['audits'];
     public $sortable = [
-        'order_column_name' => 'order',
+        'order_column_name' => 'orden',
         'sort_when_creating' => true,
     ];
 
     protected $fillable = [
-    'title',
-    'ficha_id',
-    'order',
-    'body',
+        'title',
+        'ficha_id',
+        'orden',
+        'status',
+        'body',
 
 
 
-   ];
+    ];
 
 
     protected static function boot()
     {
         parent::boot();
 
-        // Order by name ASC
-        static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('order', 'asc');
-        });
+
+
+        static::addGlobalScope(new OrdenScope);
     }
 
     public function generateTags(): array
@@ -73,12 +78,12 @@ class Capitulo extends Model implements Sortable, Auditable
     }
 
     /**
-  * {@inheritdoc}
-  */
-    // public function auditable()
-    // {
-//     return $this->morphTo()->withTrashed();
-    // }
+     * {@inheritdoc}
+     */
+    public function auditable()
+    {
+        return $this->morphTo()->withTrashed();
+    }
 
     /**
      * {@inheritdoc}
@@ -86,5 +91,26 @@ class Capitulo extends Model implements Sortable, Auditable
     public function capitulo()
     {
         return $this->morphTo()->withTrashed();
+    }
+
+    public function toSearchableArray()
+    {
+
+        // Customize array...
+
+        return ['id' => $this->id, 'title' => (string) $this->title, 'body' => $this->body, 'status' => $this->status];
+    }
+
+    public function presenter(): CapituloPresenter
+    {
+        return new CapituloPresenter($this);
+    }
+}
+
+class OrdenScope implements Scope
+{
+    public function apply(Builder $builder, Model $model)
+    {
+        return $builder->where('capitulos.orden', '!=', null);
     }
 }

@@ -52,14 +52,17 @@
     @php
         $i=0;
     @endphp
-    @foreach ($fichas as $ficha )
+    @forelse ($fichas as $ficha )
         @php
             $i++;
         @endphp
         <x-ficha-card :ficha="$ficha" :category="$category" :i="$i" />
 
-
-    @endforeach
+    @empty
+        <div class="text-center col-span-3 text-gray-500 text-lg">
+            {{__('No hay fichas disponibles en la sección')}}
+        </div>
+    @endforelse
    
 
 </div>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Models\User;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\UserSwitch;
-use Orchid\Platform\Models\User;
+//use Orchid\Platform\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -158,7 +159,9 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
-     
+        $roles_actuales=$user->getRoles();
+       
+      
         $request->validate([
             'user.email' => [
                 'required',
@@ -193,9 +196,15 @@ class UserEditScreen extends Screen
             ->save();
             $user->locale= $locale;
             $user->save();
-
+              
         $user->replaceRoles($request->input('user.roles'));
 
+        $roles_diff= $user->getRoles()->diff($roles_actuales);
+        if(!$roles_diff->isEmpty()){
+            //dispara evento de informacion al usuario de cambio de perfil si hay diferencia en los roles
+            $user->activado();
+        }
+        
         Toast::info(__('User was saved.'));
 
         return redirect()->route('platform.systems.users');

@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Capitulo;
 use App\Models\Ficha;
+use App\Models\User;
 use App\Observers\FichaObserver;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 use Orchid\Icons\IconFinder;
 use Orchid\Platform\Dashboard;
@@ -43,8 +43,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(Dashboard $dashboard, IconFinder $iconFinder)
     {
         Ficha::observe(FichaObserver::class);
+        User::observe(UserObserver::class);
+
         $dashboard->registerSearch([
-            Ficha::class,
+           Ficha::class,
+           Capitulo::class,
+          //User::class,
             //...Models
         ]);
 

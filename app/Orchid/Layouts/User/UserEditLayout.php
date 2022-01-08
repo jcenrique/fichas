@@ -7,6 +7,7 @@ namespace App\Orchid\Layouts\User;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Label;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Rows;
 
@@ -23,6 +24,10 @@ class UserEditLayout extends Rows
 
       // dd(is_null($user->domain));
         return [
+            Label::make('etiqueta')
+                ->title(__('El usuario pertenece al Directorio Activo, solo se puede modificar el idioma'))
+                ->canSee(isset($user->domain )),
+
             Input::make('user.name')
                 ->type('text')
                 ->max(255)

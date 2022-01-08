@@ -7,14 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserCreado extends Notification
+class UserAviso extends Notification
 {
     use Queueable;
 
-
-   
     private $message;
     private $user;
+    
 
     /**
      * Create a new notification instance.
@@ -24,8 +23,9 @@ class UserCreado extends Notification
     public function __construct( $message, $user)
     {
         $this->message=$message ;
-        $this->user = $user;
+       $this->user = $user;
     }
+
 
     /**
      * Get the notification's delivery channels.
@@ -46,14 +46,12 @@ class UserCreado extends Notification
      */
     public function toMail($notifiable)
     {
-      
-        return (new MailMessage() )
-        ->subject(__('Nuevo usuario en el sistema'))
-        ->line($this->message)
-        ->line(__('Usuario') . ': ' . $this->user->name)
-        ->line(__('Mail') . ': ' . $this->user->email)
         
-        ->action(__('Asignar rol usuario'), route('platform.systems.users.edit',  $this->user))
+        return (new MailMessage())
+        ->subject(__('Usuario creado/modificado'))
+        ->line($this->message)
+        ->line($this->user->getRoles()->count()>0 ?__('Perfiles asignados: ') . $this->user->getRoles()->implode('name' , ' | '):'')
+       
         ->line(__('Gracias por usar la aplicación!'));
     }
 

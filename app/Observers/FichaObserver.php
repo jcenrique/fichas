@@ -25,7 +25,7 @@ class FichaObserver
      */
     public function updated(Ficha $ficha)
     {
-        //
+        $ficha->capitulos()->update(['status' => $ficha->status]) ;
     }
 
     /**
@@ -36,6 +36,7 @@ class FichaObserver
      */
     public function deleted(Ficha $ficha)
     {
+        
     }
 
     /**
@@ -59,5 +60,11 @@ class FichaObserver
     public function forceDeleted(Ficha $ficha)
     {
         //
+    }
+
+    public function deleting(Ficha $ficha)
+    {
+       
+        $ficha->update(['status' => 0]);
     }
 }

@@ -18,9 +18,9 @@
             @endempty
 
             <span class="clear">
-                <span class="text-ellipsis">{{$item->title()}}</span>
+                <span class="text-ellipsis">{!!$item->title()!!}</span>
                 <small class="text-muted clear text-ellipsis">
-                    {{$item->subTitle()}}
+                    {!!$item->subTitle()!!}
                 </small>
             </span>
         </a>

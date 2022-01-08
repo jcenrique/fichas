@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\UserAviso;
 use App\Notifications\UserCreado;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Scout\Searchable;
@@ -11,15 +12,16 @@ use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
-use Illuminate\Support\Facades\Notification;
+use Orchid\Platform\Models\User as PlatformUser;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory ;
+use Orchid\Support\Facades\Alert;
 
-class User extends Authenticatable implements LdapAuthenticatable
+class User extends PlatformUser implements LdapAuthenticatable
 {
     use Notifiable;
     use  Filterable;
-    use Searchable;
+  
     use AsSource;
     use HasFactory;
 
@@ -90,33 +92,17 @@ class User extends Authenticatable implements LdapAuthenticatable
         'updated_at',
         'created_at',
     ];
+    
+    protected $observables = ['activado'];
+
     protected static function boot()
     {
         parent::boot();
       
-        static::creating(function ($user) {
-            if ($user->permissions === null) {
-                // if tags are not provided on creation
-                $user->permissions=  ['home' => true];  // set empty json array
+       
+    }
 
-                 
-            }
-
-           
-        });
-
-        static::created(function ($user){
-
-            //notificar al administrador para asigna role
-           
-            $role =  Role::where('name', 'admin')->first();
-            $users = $role->getUsers();
-
-              
-            $notificacion = new UserCreado(('Un nuevo usuario ha accedido al sistema, debe asignar el rol correspondiente al usuario'), $user);
-
-
-            Notification::send($users, $notificacion);
-        });
+    public function activado(){
+        $this->fireModelEvent('activado',false);
     }
 }

@@ -4,6 +4,7 @@ return [
     'directories'=> [
         'app',
         'resources',
+        'vendor\orchid\crud\src'
     ],
 
     // File Patterns to search for.

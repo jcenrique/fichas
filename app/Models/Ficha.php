@@ -80,13 +80,12 @@ class Ficha extends Model implements Auditable
     {
         parent::boot();
 
-        static::created(function ($item) {
-            Log::info('Item Created Event:'.$item);
-        });
-        self::deleting(function ($model) {
-            $model->status = 0;
-            $model->save();
-        });
+       
+        // self::deleting(function ($model) {
+        //     $model->status = 0;
+        //     $model->save();
+        // });
+        
     }
     public function generateTags(): array
     {
@@ -119,13 +118,17 @@ class Ficha extends Model implements Auditable
      */
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        //$array = $this->only('title', 'description');
-
+      
         // Customize array...
 
-        return $array;
+         return [
+                'id' => $this->id ,
+                'title' => (string) $this->title, 
+                'code' => $this->body , 
+                'status' => $this->status,
+                'description'  => $this->description,
+                'instalacion'  => $this->instalacion,
+                ] ;
     }
 
 
@@ -156,7 +159,7 @@ class Ficha extends Model implements Auditable
 
     public function scopeOrderCapitulo($query)
     {
-        return $this->capitulos()->max('order') + 1;
+        return $this->capitulos()->max('orden') + 1;
     }
 
 

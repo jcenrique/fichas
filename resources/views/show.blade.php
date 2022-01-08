@@ -16,7 +16,7 @@
             <h2 class="text-2xl mb-4 text-gray-300">{{$ficha->description}}</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                        <p class="mb-2"><i class="fas fa-chart-line text-yellow-400 mr-2"></i> {{__('Categoría:')}}
+                        <p class="mb-2"><i class="fas fa-chart-line text-yellow-400 mr-2"></i> {{__('Categoría')}}:
                             {{$ficha->category->name}}</p>
                         <p class="mb-2"><i class="fas fa-layer-group text-yellow-400 mr-2"></i>{{__('Capítulos')}}:
                             {{$ficha->capitulos_count}}</p>

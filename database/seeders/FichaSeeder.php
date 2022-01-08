@@ -26,7 +26,7 @@ class FichaSeeder extends Seeder
             ]);
             $i=0;
             foreach ($capitulos as $capitulo) {
-                $capitulo->order = $i++;
+                $capitulo->orden = $i++;
             }
         }
     }

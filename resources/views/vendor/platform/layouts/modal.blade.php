@@ -22,7 +22,7 @@
                   data-form-button-text="{{ __('Loading...') }}"
             >
                 <div class="modal-header {{$type}} ">
-                    <h4 class="modal-title text-black fw-light text-base mb-2 " data-target="modal.title">{{$title}}</h4>
+                    <h4 class="modal-title text-black fw-light text-base mb-2 " data-modal-target="title">{{$title}}</h4>
                     @if(!$withoutCloseButton)
                     <button type="button" class="btn-close" title="Close" data-bs-dismiss="modal" aria-label="Close">
                     </button>

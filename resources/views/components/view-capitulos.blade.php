@@ -39,13 +39,13 @@
 
         <article @if ($loop->first)
             x-data="{open: true}"
-            class=" border-1 border-b-0 border-gray-300 rounded-t-lg overflow-hidden order-{{$capitulo->order}}"
+            class=" border-1 border-b-0 border-gray-300 rounded-t-lg overflow-hidden order-{{$capitulo->orden}}"
             @elseif($loop->last)
             x-data="{open: false}"
-            class=" border-1 border-b-1 border-gray-300 rounded-b-lg overflow-hidden order-{{$capitulo->order}}"
+            class=" border-1 border-b-1 border-gray-300 rounded-b-lg overflow-hidden order-{{$capitulo->orden}}"
             @else
             x-data="{open: false}"
-            class=" border-1 border-b-0 border-gray-300 order-{{$capitulo->order}}"
+            class=" border-1 border-b-0 border-gray-300 order-{{$capitulo->orden}}"
             @endif
             >
             <i class="fa-header-1"></i>

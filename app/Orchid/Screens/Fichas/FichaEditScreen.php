@@ -162,7 +162,7 @@ class FichaEditScreen extends Screen
 
             Layout::tabs([
 
-                'Codificación' => [
+                __('Codificación') => [
                     $this->status == 0 ? CodigoListener::class : $layout = Layout::rows([
                         Input::make('ficha.category.name')
                             ->type('text')
