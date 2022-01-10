@@ -2,13 +2,14 @@
 
 namespace App\Orchid\Layouts\Fichas;
 
+use App\Models\Role;
 use App\Models\User;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Layouts\Rows;
 use Orchid\Screen\Fields\Relation;
 use Illuminate\Support\Facades\Auth;
-use Orchid\Platform\Models\Role;
+use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TextArea;
@@ -36,7 +37,7 @@ class FichasEditLayout extends Rows
             Relation::make('ficha.user_id')
                 ->title(__('Autor'))
                 ->disabled($this->query['ficha']->status ? true : false)
-                ->value(Auth::user())
+               // ->value(Auth::user())
                 ->required()
                 ->fromModel(User::class, 'name'),
 
@@ -52,6 +53,7 @@ class FichasEditLayout extends Rows
                 ->title(__('Description'))
                 ->disabled($this->query['ficha']->status ? true : false)
                 ->required()
+              
                 ->rows(3)
                 ->maxlength(200)
                 ->placeholder(__('Breve descripción para vista previa')),
@@ -64,8 +66,10 @@ class FichasEditLayout extends Rows
                 ->maxlength(200)
                 ->placeholder(__('Ubicación de la instalación')),
 
-            Relation::make('ficha.roles')
-                ->fromModel(Role::class, 'name')
+            Select::make('ficha.roles')
+               
+                ->fromQuery(Role::where('name' ,'!=' , '')->orderBy('name'), 'name')
+               
                 ->disabled($this->query['ficha']->status ? true : false)
                 ->multiple()
                 ->required()

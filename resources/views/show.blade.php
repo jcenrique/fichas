@@ -94,6 +94,25 @@
         </article>
 
         @endforeach
+
+        <div class="my-3 font-bold text-3xl text-indigo-500">
+            {{__('Documentos')}}
+        </div>
+        <div class="flex">
+            @foreach ($ficha->attachment as $archivo)
+            <div class="flex flex-col ">
+                {!!Orchid\Screen\Actions\Link::make($archivo->original_name)
+                    ->target('blank')
+                        ->href('/storage/' . $archivo->path . $archivo->name. '.' . $archivo->extension)
+                        ->class('btn btn-link p-2 mr-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 ');
+                    !!}
+                   
+
+            </div>
+           
+            @endforeach
+        </div>
+        
     </section>
 
 </div>

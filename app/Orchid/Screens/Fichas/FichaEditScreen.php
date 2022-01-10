@@ -162,27 +162,43 @@ class FichaEditScreen extends Screen
 
             Layout::tabs([
 
-                __('Codificación') => [
-                    $this->status == 0 ? CodigoListener::class : $layout = Layout::rows([
-                        Input::make('ficha.category.name')
-                            ->type('text')
-                            ->readonly()
-                            ->title(__('Categoría')),
-
-                        Input::make('ficha.code')
-                            ->type('text')
-                            ->readonly()
-                            ->title(__('Código')),
-                    ]),
-                ],
+               
 
 
                 __('Datos básicos')      => [
+                    $this->status == 0 ? CodigoListener::class : Layout::rows([
+                                Input::make('ficha.category.name')
+                                    ->type('text')
+                                    ->readonly()
+                                    ->title(__('Categoría')),
+        
+                                Input::make('ficha.code')
+                                    ->type('text')
+                                    ->readonly()
+                                    ->title(__('Código')),
+                            ]),
+                  
+                        
+                        $this->status == 0 ? FichasEditLayout::class : Layout::view('layouts.fichas.datos-basicos', ['ficha' => $this->ficha]),
+                       
 
-                    $this->status == 0 ? FichasEditLayout::class : Layout::view('layouts.fichas.datos-basicos', ['ficha' => $this->ficha])
+                  
 
                 ],
 
+                // __('Codificación') => [
+                //     $this->status == 0 ? CodigoListener::class : Layout::rows([
+                //         Input::make('ficha.category.name')
+                //             ->type('text')
+                //             ->readonly()
+                //             ->title(__('Categoría')),
+
+                //         Input::make('ficha.code')
+                //             ->type('text')
+                //             ->readonly()
+                //             ->title(__('Código')),
+                //     ]),
+                // ],
 
 
                 __('Capítulos') => Layout::view('components.view-capitulos', ['ficha' => $this->ficha]),
@@ -195,7 +211,7 @@ class FichaEditScreen extends Screen
                 ],
 
 
-            ])->activeTab(__('Codificación')),
+            ])->activeTab(__('Datos básicos')),
 
 
 
@@ -340,8 +356,10 @@ class FichaEditScreen extends Screen
 
 
 
-    public function asyncCodigo($category_id = null, $old_category_id = null, $codigo = null, $old_codigo)
+    public function asyncCodigo($category_id=null, $old_category_id = null, $codigo = null, $old_codigo)
     {
+
+        
         if ($old_category_id != null && $codigo != null &&  ($category_id == $old_category_id)) {
             $category_name = $old_codigo;
         } elseif ($old_category_id != null && ($category_id != $old_category_id)) {
@@ -355,11 +373,11 @@ class FichaEditScreen extends Screen
             'old_category_id' => $old_category_id,
             'codigo' => $category_name,
             'old_codigo' => $old_codigo,
+           
 
 
 
-
-        ];
+         ];
     }
 
 

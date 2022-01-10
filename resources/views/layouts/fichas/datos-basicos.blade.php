@@ -43,12 +43,7 @@ use Orchid\Screen\Fields\Upload;
 
 !!}
 
-{!! Relation::make( )
-    ->title(__('Roles'))
-    ->fromModel(Role::class, 'name')
-    ->multiple()
-    ->title('Choose your ideas');
-!!} 
+
 
 <label  class="form-label">{{__('Roles')}}
             

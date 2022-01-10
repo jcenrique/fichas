@@ -24,6 +24,7 @@ use App\Orchid\Screens\Fichas\CategoryListScreen;
 use App\Orchid\Screens\Fichas\FichaCapituloEditScreen;
 use App\Orchid\Screens\Fichas\FichaEditScreen;
 use App\Orchid\Screens\Fichas\FichaListScreen;
+use App\Orchid\Screens\PruebarelationScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -157,4 +158,4 @@ Route::screen('fichas', FichaListScreen::class)
     ->name('platform.ficha-capitulo.edit');
 
 
-    
+  

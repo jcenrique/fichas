@@ -20,13 +20,13 @@ class CodigoListener extends Listener
      * @var string[]
      */
     protected $targets = [
-
-
+       
         'category_id',
+       
         'old_category_id',
         'codigo',
         'old_codigo',
-
+       
 
     ];
 
@@ -56,15 +56,22 @@ class CodigoListener extends Listener
      */
     protected function layouts(): array
     {
+        
         return [
             Layout::rows([
 
 
                 Relation::make('category_id')
+                ->fromModel(Category::class, 'name')
+                
+              //  ->applyScope('orden')
+                ->chunk(20)
+               
                 ->required()
-                    ->title(__('Seleccionar categoría'))
-                    ->fromModel(Category::class, 'name'),
-
+                ->empty()
+                ->title(__('Seleccionar categoría')),
+                 
+               
 
 
                 Input::make('old_category_id')
